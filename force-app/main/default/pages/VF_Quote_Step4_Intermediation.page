@@ -1,0 +1,332 @@
+<apex:page StandardController="zqu__Quote__c" extensions="VFC_Quote_Step4_Intermediation" tabStyle="zqu__Quote__c">
+    
+    <style>
+    .quoteWizardButtonBar 
+    {
+      text-align: center;
+    }
+    </style>
+
+
+    <!-- Mobile View -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <apex:includeScript value="{!$Resource.jquery}" />
+ 
+    <apex:includeScript value="/support/console/25.0/integration.js"/>
+    <script type="text/javascript">
+        
+        // Called on the click on the new contact button
+        function openContactFormTab() 
+        {
+            /*var url = '{!$Label.Contact_NewUrl}{!$Label.ID_Pays_lkp_contact}={!vfc_paysName}&{!$Label.ID_Pays_lkp_contact}_lkid={!vfc_paysId}&AccountName={!vfc_accountName}&AccountId={!vfc_accountId}';*/
+            var url = '{!baseURL}/003/e?{!$Label.ID_Pays_lkp_contact}={!vfc_paysName}&{!$Label.ID_Pays_lkp_contact}_lkid={!vfc_paysId}&AccountName={!vfc_accountName}&AccountId={!vfc_accountId}';
+            //var url = '{!$Label.Contact_NewUrl}con4=TESTZBILLING&con4_lkid=0017E000008EUPj&{!$Label.ID_Pays_lkp_contact}={!vfc_paysName}&{!$Label.ID_Pays_lkp_contact}_lkid={!vfc_paysId}';
+            console.log('>>> ' + url);
+            
+            // If not console mode
+            if (typeof(srcUp) == 'function') 
+            { 
+                // Open the new contact form
+                sforce.console.openPrimaryTab(null, url, false, '{!$Label.Contact_NewTitle}', openSuccess, '{!$Label.Contact_NewTitle}');
+            } 
+            else 
+            { 
+                window.open(url,'_blank');
+            }
+        }
+        
+        // Primary tab opener : handler
+        var openSuccess = function openSuccess(result) 
+        {
+            if (result.success == true) 
+            {
+                // If success, redirection to the tab
+                var primaryTabId = result.id;
+                sforce.console.focusPrimaryTabById(result.id, focusSuccess);                
+            } else 
+            {
+                alert('Primary tab cannot be opened');
+            }
+        };
+        
+        // focuser : handler
+        var focusSuccess = function focusSuccess(result) 
+        {
+            //Report whether going to the subtab was successful
+            if (result.success == true) 
+            { } 
+            else 
+            {
+                alert('Going to the new contact form was not successful');
+            }
+        };
+ 
+    </script>
+ 
+ 
+ 
+    <style>
+        .tree {
+         /*   min-height: 20px;
+            padding: 19px;
+            margin-bottom: 20px;
+            background-color: #fbfbfb;
+            border: 1px solid #999;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05); */
+        }
+
+        .tree li {
+            list-style-type: none;
+            margin: 0;
+            padding: 10px 5px 0 5px;
+            position: relative;
+        }
+
+        .tree li::before,
+        .tree li::after {
+            content: '';
+            left: -20px;
+            position: absolute;
+            right: auto;
+        }
+
+        .tree li::before {
+            border-left: 1px solid #999;
+            bottom: 50px;
+            height: 100%;
+            top: 0;
+            width: 1px;
+        }
+
+        .tree li::after {
+            border-top: 1px solid #999;
+            height: 20px;
+            top: 25px;
+            width: 25px;
+        }
+
+        .tree li span {
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border: 1px solid #999;
+            border-radius: 5px;
+            display: inline-block;
+            padding: 3px 8px;
+            text-decoration: none;
+        }
+
+        .tree li.parent_li>span {
+            cursor: pointer !important;
+        }
+
+        .tree>ul>li::before,
+        .tree>ul>li::after {
+            border: 0;
+        }
+
+        .tree li:last-child::before {
+            height: 30px;
+        }
+
+        .tree li.parent_li>span:hover,
+        .tree li.parent_li>span:hover+ul li span {
+            background: #eee;
+            border: 1px solid #94a0b4;
+            color: #000;
+        }
+    </style>
+    <!-- /Tree View -->
+
+
+    <!-- QuoteWizardTemplate -->
+    <apex:composition template="zqu__QuoteWizardTemplateNoForm" >
+ 
+    <!-- Define the page body, including form and button bar -->
+    <apex:define name="PageBody" >
+        
+        <apex:form >
+ 
+        <apex:sectionHeader title="{!$Label.Geocat_StepTitle}" />
+        
+        
+        
+        <apex:PageBlock mode="maindetail">
+        
+            <!-- Custom button bar -->
+              <apex:pageBlockButtons >
+                <apex:commandButton action="{!navigateBack}" value="{!BackButtonText}" />
+                <apex:commandButton action="{!navigateNext}" value="{!NextButtonText}" />
+                <apex:commandButton action="{!cancel}" value="Cancel" />
+              </apex:pageBlockButtons>
+
+            <!-- if no intermediation offer selected -->
+            <apex:outputPanel id="nointermediation" rendered="{!isIntermediationRatePlan == false}">
+                <apex:outputText >{!$Label.Geocat_NoIntermediationOffer}</apex:outputText>
+            </apex:outputPanel>
+            
+
+             <!--
+             -- Liste des contacts de l'account
+             -->
+             <apex:variable value="{!0.00}" var="total1"/>
+            <apex:outputPanel id="geocat" rendered="{!addgeocat == false && displayGeocat == false && isIntermediationRatePlan == true}">
+                
+                <apex:PageBlock title="{!$Label.Geocat_ListContactTitle} {!vf_contactAccountName}" > <!--mode="maindetail"-->
+                    
+                    <apex:pageBlockButtons >
+                        <apex:commandButton onclick="openContactFormTab();" image="{!URLFOR($Label.icon_add)}" value="Nouveau contact"/>
+                        <apex:commandButton action="{!refreshContact}" image="{!URLFOR($Label.icon_refresh)}" value="refresh"/>
+                      <!--  <apex:outputLink value="{!URLFOR($Action.Contact.NewContact)}">Create New Contact</apex:outputLink>-->
+  
+                    </apex:pageBlockButtons>
+                    
+                    <apex:pageBlockSection columns="1" >
+                    
+                        <apex:outputText >{!$Label.Geocat_ListContact_IntroText}</apex:outputText>
+                    
+                        <apex:pageBlockTable value="{!lContact}" var="con">
+                        
+                            <apex:column headerValue="{!$Label.Geocat_ListContact_ActionColumnHeader}" width="70px">
+                            
+                                <apex:commandLink action="{!listGeocat}">
+                                    <apex:image value="{!$Label.icon_view}" />
+                                    <apex:param name="contactId"
+                                        value="{!con.Id}"
+                                        assignTo="{!vf_contactIdSelected}"/>
+                                    <apex:param name="contactLastname"
+                                        value="{!con.Lastname}"
+                                        assignTo="{!vf_contactLastname}" />
+                                    <apex:param name="contactFirstname"
+                                        value="{!con.Firstname}"
+                                        assignTo="{!vf_contactFirstname}" />
+                                </apex:commandLink>
+                                
+                            </apex:column>
+                        
+                            <apex:column headerValue="{!$Label.Geocat_ListContact_ContactColumnHeader}">
+                                <apex:outputLink value="/{!con.Id}" target="_blank" >
+                                    {!con.Firstname} {!con.LastName}
+                                </apex:outputLink>
+                            </apex:column>
+                            <apex:column value="{!con.Fonction__c}" />
+                        
+                        <apex:column headerValue="{!$Label.Geocat_ListContact_NBGeocatColumnHeader}">
+                            {!con.PXS_Nb_Geocat_With_Competence__c}
+                        </apex:column>
+                        <!--  
+                        <apex:column headerValue="{!$Label.Geocat_ListContact_EstimationColumnHeader}">
+                            <b>
+                            <apex:image value="{!$Label.Geocat_ListContact_EstimationColumnIcon}" />
+                            <apex:outputText value="  " />
+                            <apex:outputField value="{!con.Estimation_total__c}" />
+
+                            <apex:variable var="total1" value="{!total1 + con.Estimation_total__c}" />
+
+                            <apex:facet name="footer">
+                                {!$Label.Geocat_ListContact_EstimationColumnTotalTitle} <span class="t1"></span>
+                            </apex:facet>
+                            </b>
+                         </apex:column> -->
+                        
+                    </apex:pageBlockTable>
+                    
+                    <script>
+                        document.getElementsByClassName('t1')[0].innerHTML = '{!total1} €';
+                    </script>
+                    
+                    
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            </apex:outputPanel>
+            
+            <apex:outputPanel id="geocatlist" rendered="{!addgeocat == false && displaygeocat == true && isIntermediationRatePlan == true}">
+            <apex:pageBlock title="{!$Label.Geocat_ListGeocatTitle}" > <!--mode="maindetail"-->
+            
+                <apex:pageBlockButtons >
+                    <apex:commandButton action="{!addGeocat}" image="{!URLFOR($Label.icon_add)}" />
+                    <apex:commandButton action="{!backlistGeocat}" image="{!URLFOR($Label.icon_back)}" />
+                </apex:pageBlockButtons>
+            
+                <apex:pageBlockSection columns="1" >
+
+                    <apex:outputText >{!$Label.Geocat_ListGeocat_IntroText}</apex:outputText>
+                    
+                    <apex:pageBlockTable value="{!lGeocat}" var="geo">
+                    
+                        <apex:column headerValue="{!$Label.Geocat_ListContact_ActionColumnHeader}">
+                            <apex:commandLink action="{!editGeocat}" >
+                                <apex:image value="{!$Label.icon_edit}" />
+                                <apex:param name="geocatId"
+                                    value="{!geo.Id}"
+                                    assignTo="{!vf_geocatId}" />
+                            </apex:commandLink>
+                            <apex:outputText value=" " />
+                            <apex:commandLink action="{!deleteGeocat}" >
+                                <apex:image value="{!URLFOR($Label.icon_delete)}" />
+                                <apex:param name="geocatId"
+                                    value="{!geo.Id}"
+                                    assignTo="{!vf_geocatId}" />
+                            </apex:commandLink>
+                        </apex:column>
+                        
+                        <apex:column value="{!geo.Name}" />
+                        <apex:column value="{!geo.Ville__c}" />
+                        <apex:column value="{!geo.Zone_d_intervention__c}" />
+                        <apex:column value="{!geo.DDP__c}" />
+                        <apex:column value="{!geo.Nb_Competence__c}" />
+                        <apex:column value="{!geo.Categorie_niveau__c}" />
+                        <apex:column headerValue="Estimation">
+                            <b>
+                            <apex:image value="{!$Label.Geocat_ListContact_EstimationColumnIcon}" />
+                            <apex:outputText value="  " />
+                            <apex:outputField value="{!geo.Estimation__c}" />
+                            <!-- Generating a first total -->
+                            <apex:variable var="total1" value="{!total1 + geo.Estimation__c}" />
+                            <!-- Footer of the first Cell -->
+                            <apex:facet name="footer">
+                                {!$Label.Geocat_ListContact_EstimationColumnTotalTitle} <span class="t1"></span>
+                            </apex:facet>
+                            </b>
+                         </apex:column>
+                </apex:pageBlockTable>
+                    <script>
+                        document.getElementsByClassName('t1')[0].innerHTML = '{!total1} €';
+                    </script>
+                </apex:pageBlockSection>
+                 </apex:PageBlock>
+                 
+            </apex:outputPanel>
+
+
+             <!--
+             - Formulaire d'édit du geocat
+             -->
+            <apex:outputPanel id="addgeocat" rendered="{!addgeocat == true && isIntermediationRatePlan == true}">
+                <apex:messages />
+                
+                <apex:pageBlock title="{!vfc_addupdateTitle}">
+                
+                    <apex:pageBlockButtons >
+                        <apex:commandButton action="{!saveGeocat}" image="{!URLFOR($Label.icon_save)}" />
+                        <apex:commandButton action="{!backsaveGeocat}" image="{!URLFOR($Label.icon_back)}" />
+                    </apex:pageBlockButtons>
+                    
+                    <c:Component_Geocat_Form displayContact="false" newGeocat="{!newGeocat}" mapRecord="{!mapRecord}" savegeocatbis="{!saveGeocatBis}" newgeo="{!newgeo}"/>
+                    
+                </apex:pageBlock>
+                
+            </apex:outputPanel>
+
+ 
+       </apex:pageBlock>
+      </apex:form>
+    </apex:define>
+  </apex:composition>
+
+</apex:page>

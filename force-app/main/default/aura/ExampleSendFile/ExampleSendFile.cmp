@@ -1,0 +1,23 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId,force:hasSObjectName"  controller="ExampleFileSend">
+    <aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
+    <aura:attribute name="recordId" type="String" default="{!v.recordId}" />
+    <aura:attribute name="fileContents" type="String"/>
+    <aura:attribute name="retour" type="String"/>
+   	<aura:attribute name="fileName" type="String" default="No File Selected.." />
+   	<aura:attribute name="fileType" type="String"/>
+   	<aura:attribute name="mimeType" type="String"/>
+        
+    <div>
+        <select aura:id="typeDocument">
+          <option value=""></option>
+          <option value="insurance">assurance</option>
+          <option value="certification">Certification</option>
+          <option value="kyb">kyb</option>
+          <option value="picture">Photos</option>
+        </select>
+        <input type="file" class="file" aura:id="file" onchange="{!c.handleFilesChange}"/>
+        <ui:button label="ENVOYER" press="{!c.save}"/>
+    
+    </div>
+    
+</aura:component>

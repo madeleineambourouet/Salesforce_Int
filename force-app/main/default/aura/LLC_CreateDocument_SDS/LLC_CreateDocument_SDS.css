@@ -1,0 +1,14 @@
+.THIS.documentDiv{
+    width: 100%;
+    height: 100%;
+    text-align:center;
+}
+.THIS.documentDiv .row{
+    margin-top:10px;
+}
+.THIS.documentDiv .row .label-file{
+
+}
+.THIS.documentDiv .row .input-file{
+    display:none
+}

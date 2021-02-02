@@ -1,0 +1,36 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="message" type="String" default=""/> 
+    <aura:attribute name="recordTypeName" type="String" /> 
+    <aura:attribute name="recordId" type="Id" /> 
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" description="An error message bound to force:recordData"/>
+    <force:recordData aura:id="record"
+        layoutType="FULL"
+        recordId="{!v.recordId}"
+        targetError="{!v.recordError}"
+        targetRecord="{!v.record}"
+        targetFields ="{!v.simpleRecord}"
+        recordUpdated="{!c.recordUpdated}"
+        mode="EDIT"/> 
+
+    <!-- User Interface -->
+    <aura:if isTrue="{!v.message != '' }"> 
+  		<div style="font-size:1.3em">{!v.message}</div>
+        <br/>
+        <div style="float:right">
+            <lightning:button variant="brand" 
+                              label="ok"
+                              title="ok"
+                              onclick="{! c.closeModal }"/>
+        </div>
+  	</aura:if>
+    <aura:if isTrue="{!v.message == '' }">
+  		<div style="font-size:1.3em">Traitement en cours</div>
+  	</aura:if>
+
+        
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

@@ -1,0 +1,28 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="recordId" type="Id" /> 
+    
+    <!-- User Interface -->
+
+    <div>
+        <div style="font-size:1.3em">Voulez-vous annuler ce rappel programmé ?</div>
+        <br/>
+        <div style="float:right">
+            <lightning:button variant="brand" 
+                              label="ok"
+                              title="ok"
+                              onclick="{! c.annulerRappel }"/>
+            <lightning:button variant="neutral" 
+                              label="Annuler"
+                              title="Annuler"
+                              onclick="{! c.closeModal }"/>
+        </div>
+    </div>
+ 
+    
+    
+        
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

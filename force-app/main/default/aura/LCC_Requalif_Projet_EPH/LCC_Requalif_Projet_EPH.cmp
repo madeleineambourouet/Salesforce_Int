@@ -1,0 +1,9 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    
+   <b>Nature des Travaux</b>
+   <ui:inputRadio text="Rafraichissement" label="Rafraichissement" name="Role" change="{!c.onGroup}"/><br/>
+    <ui:inputRadio text="Extension" label="Extension" name="Role" change="{!c.onGroup}"/><br/>
+    <ui:inputRadio text="Rénovation lourde" label="Rénovation lourde" name="Role" change="{!c.onGroup}"/><br/>
+    <ui:inputRadio text="Suélévation" label="Suélévation" name="Role" change="{!c.onGroup}"/><br/>
+    
+</aura:component>

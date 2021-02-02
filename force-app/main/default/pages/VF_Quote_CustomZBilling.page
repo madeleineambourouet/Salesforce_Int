@@ -1,0 +1,75 @@
+<apex:page controller="VFC_Quote_CustomZBilling"  showHeader="{!console}" tabStyle="zqu__Quote__c"><!-- title="Validation Zbilling" showHeader="checkConsole();"-->
+<!-- standardController="zqu__Quote__c" extensions="VFC_Quote_CustomZBilling" -->
+    <apex:form >
+        
+        <apex:sectionHeader title="{!$Label.CustomZbilling_Title}" />
+        
+        <apex:messages />
+        
+        <apex:pageBlock title="{!$Label.CustomZbilling_Subtitle}" >
+            
+            <apex:pageBlockButtons location="top">
+                <apex:outputPanel id="btn" >
+                  <!--  <apex:commandButton onclick="finalRedirect();" value="{!$Label.CustomZbilling_Back}"/> -->
+                   <apex:commandButton action="{!cancel}" value="{!$Label.CustomZbilling_Back}" disabled="{!isBackButtonDisabled}"/>
+                </apex:outputPanel>
+            </apex:pageBlockButtons>
+            
+            <apex:actionFunction name="step1" status="step1_status" rerender="step1_status"
+              action="{!step1Method}" oncomplete="step2();"/>
+            <apex:actionFunction name="step2" status="step2_status" rerender="step2_status"
+              action="{!step2Method}" oncomplete="step3();"/>
+            <apex:actionFunction name="step3" status="step3_status" rerender="step3_status, btn"
+              action="{!step3Method}" /> <!--oncomplete="finalRedirect();" -->
+            
+            <apex:pageBlockSection title="{!$Label.CustomZbilling_Step1_Title}" columns="1">
+                <apex:outputText >Statut : </apex:outputText>
+                <apex:actionStatus id="step1_status" startText="{!$Label.CustomZbilling_Step_Loading}" stopText="{!step1_status}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.CustomZbilling_Step2_Title}" columns="1">
+                <apex:outputText >Statut : </apex:outputText>
+                <apex:actionStatus id="step2_status" startText="{!$Label.CustomZbilling_Step_Loading}" stopText="{!step2_status}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.CustomZbilling_Step3_Title}" columns="1">
+                <apex:outputText >Statut : </apex:outputText>
+                <apex:actionStatus id="step3_status" startText="{!$Label.CustomZbilling_Step_Loading}" stopText="{!step3_status}"/>
+            </apex:pageBlockSection>
+            
+            
+            
+        </apex:pageBlock>
+        
+    </apex:form>
+    
+    <apex:includeScript value="/support/console/25.0/integration.js"/>
+    <script>
+        function checkConsole() 
+        {
+            console.log('>>>>>> checkConsole');
+            if (typeof(srcUp) == 'function') 
+            {
+                console.log('>>>>>> checkConsole() = false');
+                sforce.console.setTabTitle('Validation Zbilling');
+              return false; //yes in console
+            } else {
+                console.log('>>>>>> checkConsole() = true');
+              return true;
+            }
+        }
+    
+        step1();
+        function finalRedirect()
+        {
+            //window.location = "{!URLFOR($Action.zqu__Quote__c.View, quo.Id)}";
+            // if in console mode
+            if (typeof(srcUp) == 'function') 
+            {
+                document.location.href= "/{!quo.Id}"; 
+            }
+            else 
+                document.location.href ="/{!quo.Id}"; 
+
+        }
+    </script>
+
+</apex:page>

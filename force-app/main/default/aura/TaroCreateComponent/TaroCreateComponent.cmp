@@ -1,0 +1,16 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" access="global">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="sObjectName" type="String" />
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	<lightning:workspaceAPI aura:id="workspace" />
+     
+    <aura:if isTrue="{!v.message == '' }">
+  		<div style="font-size:1.3em">Chargement en cours ...</div>
+  	</aura:if>
+
+        
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

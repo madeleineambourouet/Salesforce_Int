@@ -1,0 +1,30 @@
+<apex:page standardcontroller="Account">
+ <style>
+     .xxxx {
+    font-weight:bold;
+    font-size:16px;
+    color:Red} 
+ </style>
+
+    <apex:includeScript value="{!$Resource.jquery}" />
+    <!--<span style="padding-left: 0px;font-weight: bold;font-size: 24px;color: #ff0000"><strong>{!Account.Statut_de_paiement__c} {!Account.Client_suspendu__c}</strong></span> 
+    <span style="padding-left: 0px;font-weight: bold;font-size: 24px;color: #ff0000"><strong>
+    {!IF((Account.aucun_ci_actif__c ==true)," - Aucun critère d’intervention actif ",IF((Account.au_moins_un_ci_suspendu__c==true),"- Au moins un Critère d’intervention suspendu", ""))}</strong></span>-->
+    
+    <span style="padding-left: 0px;font-weight: bold;font-size: 24px;color: #ff0000"><strong>{!IF((Account.Statut_de_paiement__c!=''),Account.Statut_de_paiement__c,"")} 
+    {!IF((Account.Statut_de_paiement__c =='' &&  Account.Defaut_Assurance__c == true),"Défaut d’assurance","")} 
+    {!IF((Account.Client_suspendu__c!=''),Account.Client_suspendu__c,"")}</strong></span> 
+    <!--
+    <span style="padding-left: 0px;font-weight: bold;font-size: 24px;color: #ff0000"><strong>{!IF((Account.Statut_de_paiement__c!='' && Account.Client_suspendu__c =='' && ( Account.aucun_ci_actif__c == true || Account.offre_intermediation_active__c==true ))," - ","")}</strong></span> -->
+
+    <span style="padding-left: 0px;font-weight: bold;font-size: 24px;color: #ff0000"><strong>
+    {!IF((Account.aucun_ci_actif__c ==true && Account.Statut_de_paiement__c =='' && Account.Defaut_Assurance__c == false && Account.Client_suspendu__c==''),"Aucun Critère d’Intervention actif","")}</strong></span>
+
+    <span style="padding-left: 0px;font-weight: bold;font-size: 24px;color: #FFC300"><strong>
+    {!IF((Account.au_moins_un_ci_suspendu__c ==true && Account.Statut_de_paiement__c =='' && Account.aucun_ci_actif__c == false && Account.Defaut_Assurance__c == false && Account.Client_suspendu__c==''),"Au moins un Critère d’Intervention suspendu","")}</strong></span>
+
+    <span style="padding-left: 0px;font-weight: bold;font-size: 24px;color: green"><strong>{!IF((Account.offre_intermediation_active__c==true && Account.Statut_de_paiement__c =='' && Account.au_moins_un_ci_suspendu__c == false && Account.aucun_ci_actif__c == false && Account.Defaut_Assurance__c == false && Account.Client_suspendu__c==''),"Offre d’intermédiation active","")}</strong></span>
+
+   <script>
+   </script>
+</apex:page>

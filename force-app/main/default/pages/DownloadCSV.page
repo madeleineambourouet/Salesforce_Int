@@ -1,0 +1,2 @@
+<apex:page controller="ImportToolCategory" showHeader="false" sidebar="false" contentType="text/csv#log.csv">{!contentLog}
+</apex:page>

@@ -1,0 +1,112 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId">
+    <aura:attribute name="statutActivation" type="String" />
+    <aura:attribute name="recordId" type="Id" /> 
+    <aura:attribute name="compteRecord" type="Object"/>
+    
+    <aura:attribute name="recordLoadError" type="String"/>
+    
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="Statut_activation__c"
+                      targetFields="{!v.compteRecord}"
+                      targetError="{!v.recordLoadError}"
+                      />
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 80rem !important;
+        width:80% !important;
+        }
+    </aura:html>
+    <!-- User Interface -->
+    <div>
+        <h1 style="font-size:1.3em;text-align:center">Suspension/Réactivation nouvelle offre LMSG</h1>
+        <hr/>
+        
+        
+        
+        <lightning:recordEditForm
+                                  aura:id="editFormSuspension"
+                                  onload="{!c.handleLoad}"
+                                  onsubmit="{!c.handleSubmit}"
+                                  onsuccess="{!c.handleSuccess}"
+                                  recordId="{!v.recordId}"
+                                  objectApiName="Account">
+            
+            
+            <aura:if isTrue="{!v.compteRecord.Statut_activation__c == 'Pro_suspendu'}">
+                <div>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_6-of-12">
+                            <label for="statutProjetActuel">Statut d'activation LMSG actuel</label>
+                            <lightning:outputField aura:id="statutCompteActuel" variant="label-hidden" title="Statut d'activation LMSG actuel" fieldName="Statut_activation__c"/>
+                        </div>
+                        <div class="slds-col slds-size_6-of-12">
+                            <label for="statutProjetActuel">Motif suspension actuel</label>
+                            <lightning:inputField aura:id="motifSuspension" fieldName="Motif__c"  value="" disabled="true"/>
+                        </div>
+                        <div class="slds-col slds-size_6-of-12">
+                            <lightning:inputField aura:id="statutCompteNouveau" fieldName="Statut_activation__c" title="Statut d'activation LMSG" value="Pro_actif" disabled="true"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div style="float:center">
+                        <lightning:button variant="neutral" 
+                                          label="Enregistrer"
+                                          title="Enregistrer"
+                                          onclick="{! c.reactivationAction }"/>
+                        <lightning:button variant="neutral" 
+                                          label="Annuler"
+                                          title="Annuler"
+                                          onclick="{! c.cancelAction }"/>
+                    </div>
+                </div>  
+                <aura:set attribute="else">
+                    <aura:if isTrue="{! and(v.compteRecord.Statut_activation__c != 'Pro_actif_positionnable', v.compteRecord.Statut_activation__c != 'Pro_actif') }">
+                        <div style="text-align:center;font-size:16px;">
+                            <p>Vous ne pouvez suspendre qu'un compte au statut Pro actif ou Pro actif positionnable ...</p>
+                            <br/><br/>
+                            <div style="float:center">
+                                <lightning:button variant="neutral" 
+                                                  label="Fermer"
+                                                  title="Fermer"
+                                                  onclick="{! c.cancelAction }"/>
+                            </div>
+                        </div>
+                        <aura:set attribute="else">
+                            <div>
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size_6-of-12">
+                                        <label for="statutProjetActuel">Statut d'activation LMSG actuel</label>
+                                        <lightning:outputField aura:id="statutCompteActuel" variant="label-hidden" title="Statut d'activation LMSG actuel" fieldName="Statut_activation__c"/>
+                                    </div>
+                                    <div class="slds-col slds-size_6-of-12">
+                                        <lightning:inputField aura:id="motifSuspension" fieldName="Motif__c" required="true"/>
+                                    </div>
+                                    <div class="slds-col slds-size_6-of-12">
+                                        <lightning:inputField aura:id="statutCompteNouveau" fieldName="Statut_activation__c" title="Statut d'activation LMSG" value="Pro_suspendu" disabled="true"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div style="float:center">
+                                    <lightning:button variant="neutral" 
+                                                      label="Enregistrer"
+                                                      title="Enregistrer"
+                                                      onclick="{! c.suspensionAction }"/>
+                                    <lightning:button variant="neutral" 
+                                                      label="Annuler"
+                                                      title="Annuler"
+                                                      onclick="{! c.cancelAction }"/>
+                                </div>
+                            </div>  
+                        </aura:set>
+                    </aura:if> 
+                </aura:set>
+            </aura:if>      
+        </lightning:recordEditForm>
+        
+    </div>
+    
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+    
+</aura:component>

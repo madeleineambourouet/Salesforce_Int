@@ -1,0 +1,9 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="Liste_Devis_LMSG" >
+
+    <lightning:card >
+        <div class="slds-p-left_small slds-p-right_small">	
+            <lightning:recordForm  recordId="{!v.recordId}" objectApiName="Projet_LMSG__c" fields="Name"/>
+        </div>
+    </lightning:card>
+
+</aura:component>

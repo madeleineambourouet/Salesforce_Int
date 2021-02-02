@@ -1,0 +1,56 @@
+<apex:page StandardController="Projet__c" extensions="VFC_MER_Projet"  showHeader="false" sidebar="false">
+    
+    <script type='text/javascript' src='/canvas/sdk/js/publisher.js'/> 
+           <style>
+                .requiredInput .requiredBlock, .requiredBlock {background-color: white;} 
+                .custompubblock div {display: inline-block;} 
+                .custompublabel {width:54px;} 
+           </style>
+          
+          <script> 
+                function refreshFeed() 
+                { 
+                   
+                  Sfdc.canvas.publisher.publish({name : 'publisher.refresh', payload : {feed:true}}); 
+                }
+           </script> 
+
+    <apex:sectionHeader title="{!$ObjectType.Projet__c.Label}" subtitle="{!curPrj.Name}" />
+
+    <apex:form >
+        <apex:pageBlock title="Nouvelle MER manuelle avec Competence" mode="edit">
+
+            <apex:pageBlockButtons >
+                <apex:commandButton id="saveBtn" action="{! saveNewMER }" value="Save" disabled="false" onclick="alert('Enregistrement sauvegardé avec succès'),refreshFeed();" />
+                <!--<apex:commandButton value="Post" action="{!saveNewMER}" oncomplete="refreshFeed();"/>-->
+                <apex:commandButton id="cancelBtn" action="{! cancelEditMER }" value="Cancel" immediate="true" />
+            </apex:pageBlockButtons>
+        
+            <apex:pageMessage summary="Vous devez assigner une compétence à cette MER!" severity="warning" strength="3" rendered="{! isCompetenceNull }" />
+            <apex:pageMessage summary="Vous devez assigner un contact à cette MER! (pas de contact principal trouvé pour le compte)" severity="warning" strength="3" rendered="{! isContactNull }" />
+            
+            <apex:pageBlockSection title="Nouvelle MER" columns="2" id="nouvelleMER">
+
+                <apex:inputField value="{!curMER.Professionnel__c}" rendered="true"/>
+                <apex:inputField value="{!curMER.Date_MER_Architecte__c}" rendered="{! !isArtisansQualifies }" required="true"/>
+                <apex:inputField value="{!curMER.Date_MER_LMSG__c}" rendered="{! !isAccompagnement }" required="true"/>
+                <apex:inputField value="{!curMER.Contact__c}" rendered="true">
+                    <apex:actionSupport event="onchange" action="{!ContactProChanged}" reRender="nouvelleMER" />
+                </apex:inputField>                
+                <!-- <apex:inputField value="{!curMER.Prospect__c}" rendered="true"/> -->
+
+                <apex:pageBlockSectionItem rendered="{! isArtisansQualifies }" >
+                    <apex:outputLabel value="Competence" for="Competence"/>
+                     <apex:outputPanel id="Competence">
+                        <apex:selectList size="1" value="{! CompetenceSelected }">
+                            <apex:selectOptions value="{! CompetenceOptions }"/>
+                            <apex:actionSupport event="onchange" action="{! CompetenceChanged }" reRender="nouvelleMER" />                           
+                        </apex:selectList>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,120 @@
+<apex:page controller="TaroEdit">
+    <html>
+        <head>
+            <meta charset="UTF-8"/>
+            <link rel="stylesheet" href="{!urlTaroCSS}"/>
+            <style>
+                .loaderParent{
+                position:absolute;
+                top:0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: gray;
+                opacity: 0.5;
+                }
+                .loader {
+                border: 5px solid #f3f3f3;
+                border-radius: 50%;
+                border-top: 5px solid #3498db;
+                width: 20px;
+                height: 20px;
+                -webkit-animation: spin 2s linear infinite; /* Safari */
+                animation: spin 2s linear infinite;
+                position:absolute;
+                top:45%;
+                left: 45%;
+                }
+                
+                /* Safari */
+                @-webkit-keyframes spin {
+                0% { -webkit-transform: rotate(0deg); }
+                100% { -webkit-transform: rotate(360deg); }
+                }
+                
+                @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+                }
+            </style>
+        </head>
+        <body style="background-color: #FFFFFF">
+            <taro-funnel data-env="{!urlTaroEnvironnement}" context="sg" BSKU="{!bsku}" callback="callbackFunction" parameters='{!taroJsonParameters}'/>
+            
+            <script async="true" type="text/javascript" src="{!urlTaroJS}"></script>
+            <apex:includeScript value="/support/console/48.0/integration.js"/>
+                <script> 
+                function sendVariable(parameter){
+                document.getElementById('{!$Component.apForm.myHiddenValue}').value = parameter;
+                var hiddenValue = document.getElementById('{!$Component.apForm.myHiddenValue}').value;
+                passValueToController();
+                //testCloseTab();
+                //sforce.console.refreshPrimaryTabById(objectId, true);
+                //sforce.one.editRecord(objectId);
+            }
+            window.callbackFunction = function (param) {
+                document.getElementById('idLoaderParent').style="display:block";
+                sendVariable(param);
+            }       
+            function testCloseTab() {
+                console.log('CLOSSEEEEEEE');
+                //First find the ID of the current tab to close it
+                sforce.console.getEnclosingTabId(closeSubtab);
+            }
+            
+            var closeSubtab = function closeSubtab(result) {
+                //Now that we have the tab ID, we can close it
+                var tabId = result.id;
+                sforce.console.closeTab(tabId);
+            };
+            
+            function RefreshPrimaryTab(id) 
+            {
+                if (sforce.console.isInConsole()){
+                    sforce.console.getFocusedPrimaryTabId(showTabId);
+                    testCloseTab();
+                }
+                else{
+                    window.top.location.href = '/' + id;
+                    testCloseTab();
+                }
+            }
+            
+            var showTabId = function showTabId(result) 
+            {
+                var tabId = result.id;
+                sforce.console.refreshPrimaryTabById(tabId , true);
+                //testCloseTab();
+                //sforce.console.closeTab(tabId);
+            };
+            
+            
+            
+            
+            </script>
+            <apex:form id="apForm">
+                <!-- Declare a hidden field and bind it to required variable in controller using value attribute -->
+                <apex:inputHidden value="{!jsonFromTaro}" id="myHiddenValue"/>
+                
+                <!-- Action function for the rerendering the hidden variable-->
+                <apex:actionFunction name="passValueToController" action="{!processTaroData}" oncomplete="RefreshPrimaryTab('{!objectId}');"/>
+                <style>
+                    body button, body .x-btn, body .btn, body .btnDisabled, body .btnCancel, body .menuButton .menuButtonButton {
+                    color: #333;
+                    margin: 1px;
+                    padding: 2px 3px;
+                    border: 1px solid #b5b5b5;
+                    border-bottom-color: #7f7f7f;
+                    background: #000000;
+                    font-weight: bold;
+                    font-size: .9em;
+                    -moz-border-radius: 3px;
+                    -webkit-border-radius: 3px;
+                    border-radius: 3px;
+                    }
+                </style>
+            </apex:form>
+            <div class="loaderParent" id="idLoaderParent" style="display:none"><div class="loader"></div></div>
+        </body>
+    </html>
+</apex:page>

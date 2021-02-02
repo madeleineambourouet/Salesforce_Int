@@ -1,0 +1,18 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="accRecord" type="Account"
+                    default="{ 'sobjectType': 'Account'}"/>
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- User Interface -->
+    <div>
+        <div style="font-size:1.6em;color:#1797c0">Génération Artisan - programmes de fidélité</div>
+        <br/>
+        <p style="font-size:1.1em">{!v.message}</p>
+    </div>
+        
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

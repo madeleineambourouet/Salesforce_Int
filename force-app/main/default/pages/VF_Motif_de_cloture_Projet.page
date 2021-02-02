@@ -1,0 +1,27 @@
+<apex:page standardController="Projet__c" extensions="VFC_EditProject"  showHeader="true" sidebar="true">
+
+    <apex:sectionHeader title="{!$ObjectType.Projet__c.Label}" subtitle="{!curProject.Name}" />
+
+    <apex:form >
+        <apex:pageMessages />
+        <apex:pageBlock title="Remplir le motif de clôture" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton id="saveMotifBtn" action="{!saveProjectMotif}" value="Enregistrer" />
+                <apex:commandButton action="{!cancelProject}" value="Annuler" />
+                          
+            </apex:pageBlockButtons>
+
+            
+            <apex:pageBlockSection title="Motif de Clôture" columns="2" id="MotifSection">
+               	
+               <apex:inputField value="{! curProject.Statut_Projet__c }" html-disabled="true"/>
+              	<apex:inputField value="{! curProject.Sous_statut__c }" html-disabled="true"/>
+                
+                <apex:inputField value="{! curProject.Motif_de_cloture__c }" required="true"/>               
+                   
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>    
+    
+</apex:page>

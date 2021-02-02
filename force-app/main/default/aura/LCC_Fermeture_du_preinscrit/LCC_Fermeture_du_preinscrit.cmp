@@ -1,0 +1,48 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="choixFermeture" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id" /> 
+    <!--<aura:attribute name="leadRecord" type="Lead"
+                    default="{ 'sobjectType': 'Lead'}"/>-->
+ 
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" description="An error message bound to force:recordData"/>
+    <force:recordData aura:id="record"
+        layoutType="FULL"
+        recordId="{!v.recordId}"
+        targetError="{!v.recordError}"
+        targetRecord="{!v.record}"
+        targetFields ="{!v.simpleRecord}"
+        recordUpdated="{!c.recordUpdated}"
+        mode="EDIT"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- User Interface -->
+    <aura:if isTrue="{! and(v.simpleRecord.Status != 'Fermée', v.simpleRecord.Status != 'Qualifiée') }">
+        <div>
+            <div style="font-size:1.3em">Voulez-vous vraiment fermer le préinscrit ? Si oui, n'oubliez pas de renseigner le sous-statut du Préinscrit.</div>
+            <br/>
+            <p style="font-size:1.1em;color:red">{!v.message}</p>
+            <br/>
+            <div style="float:right">
+                <lightning:button variant="brand" 
+                                              label="ok"
+                                              title="ok"
+                                              onclick="{! c.fermerPreinscrit }"/>
+                <lightning:button variant="neutral" 
+                                  label="Annuler"
+                                  title="Annuler"
+                                  onclick="{! c.closeModal }"/>
+            </div>
+        </div>
+   	<aura:set attribute="else">
+      	<div style="font-size:1.3em">La piste est déjà fermée</div>
+    </aura:set>
+  	</aura:if>
+        
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

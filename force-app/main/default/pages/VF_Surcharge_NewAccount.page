@@ -1,0 +1,2 @@
+<apex:page standardController="Account" extensions="VFC_Extension_Account" action="{!fillCountry}">
+</apex:page>

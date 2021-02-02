@@ -1,0 +1,43 @@
+<apex:page standardController="zqu__Quote__c" recordSetVar="opportunities" extensions="HelperButton">
+
+	<apex:includeScript value="/soap/ajax/21.0/connection.js"/>
+	<apex:includeScript value="soap/ajax/21.0/apex.js"/>
+
+	<script>
+
+		alert('{!$CurrentPage.Parameters.Id}');
+
+	
+
+		function getQuoteResil() {
+		Visualforce.remoting.Manager.invokeAction(
+	        '{!$RemoteAction.HelperButton.resilierSouscription}',
+	        '{!$CurrentPage.Parameters.Id}',
+	        function(result, event){
+	        	/*for (var property in event) {
+				  output += property + ': ' + event[property]+'; ';
+				}
+				console.log(output);
+				alert(output);*/
+				if (event.status) {
+					if ((event.result).startsWith('/apex')) {
+						var url = event.result.replace(new RegExp('amp;', 'g'), '');
+						alert(url);
+						window.location.href = url;
+					} else {
+						alert(event.result);
+						window.location.href = "/{!$CurrentPage.Parameters.Id}";
+					}
+				} else {
+					alert("Une erreur s'est produite, contactez votre administrateur Salesforce.")
+					window.location.href = "/{!$CurrentPage.Parameters.Id}";
+				}
+	        });
+		};
+
+		getQuoteResil();
+		//alert(tmp);
+
+		
+	</script>
+</apex:page>

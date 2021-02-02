@@ -1,0 +1,150 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId" >
+    <aura:attribute name="merRecord" type="object" />
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    <aura:attribute name="recordId" type="String" />
+    <force:recordData aura:id="recordLoader"
+    recordId="{!v.recordId}"
+    fields="Name,Projet__c"
+    targetFields="{!v.merRecord}"
+    targetError="{!v.recordLoadError}"
+    />
+         <lightning:recordEditForm
+			onsuccess="{!c.handleSuccess}"
+            objectApiName="Facturation__c">
+            <!-- the messages component is for error messages -->
+            <lightning:messages />
+             <h1 style="font-weight: bold;">Informations</h1>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Typologie_de_Facturation__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Projet__c" value="{!v.merRecord.Projet__c}"/>
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Mise_en_relation__c" value="{!v.recordId}"/>
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Entitee_de_facturation__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Motif_de_facturation__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Date_de_facture__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Date_d_echeance_paiement_Reno__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Statut_paiement_Reno__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Date_de_paiement__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Montant_HT_devis_signe__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Montant_TTC_devis_signe__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Commission_Pro_devis_signe_HT__c"/>
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Commission_Pro_devis_signe_TTC__c"/>
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Date_devis_signe__c"/>
+                </div>
+            </div>
+             
+             <h1 style="font-weight: bold;">Montant HT et TTC commun aux typologie de facturation</h1>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-3">
+                    <lightning:inputField fieldName="Montant_facture_HT__c" />
+                </div>
+                <div class="slds-size_1-of-3">
+                    <lightning:inputField fieldName="Montant_facture_TTC__c" />
+                </div>
+                <div class="slds-size_1-of-3">
+                    <lightning:inputField fieldName="N_Facture__c"/>
+                </div>
+            </div>
+             
+             <h1 style="font-weight: bold;">Relevé de cotes &amp; métrés</h1>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Date_de_realisation_du_metre__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Surface_du_metreen_M2__c" />
+                </div>
+            </div>
+             
+             <h1 style="font-weight: bold;">Accompagnement / Apporteur d'affaires</h1>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Date_de_debut_de_chantier__c" />
+                </div>
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Date_signature_contrat_apport_affaires__c" />
+                </div>
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Date_de_reception_de_chantier__c" />
+                </div>
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Reception_avec_reserves__c" />
+                </div>
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Montant_fourni_pose_HT_du_chantier__c" />
+                </div>
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Montant_fourni_pose_TTC_du_chantier__c" />
+                </div>
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Commission_Part_HT__c" />
+                </div>
+            </div>
+             
+             <h1 style="font-weight: bold;">Concours architectes &amp; décorateurs</h1>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-3">
+                    <lightning:inputField fieldName="Date_de_publication_du_concours__c" />
+                </div>
+                
+            </div>
+             
+             <h1 style="font-weight: bold;">Etude &amp; Démarche administrative</h1>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Date_de_lancement_des_demarches__c" />
+                </div><br/>
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Nature_de_la_demarche_realiser__c" />
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning:inputField fieldName="Autorisation_obtenues__c"/>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Date_de_dernier_depot__c"/>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <lightning:inputField fieldName="Date_theorique_d_obtention__c"/>
+                </div>
+            </div>
+             
+             <h1 style="font-weight: bold;">Planches d’ambiance</h1>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-size_1-of-3">
+                    <lightning:inputField fieldName="Date_d_envoi_des_planches_ambiance__c" />
+                </div>
+            </div>
+             
+            <div class="slds-m-top_medium">
+                <lightning:button disabled="{!v.disabled}" variant="brand" type="submit" name="save" label="Save" />
+            </div>
+        </lightning:recordEditForm>
+</aura:component>

@@ -1,0 +1,20 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="accRecord" type="Account"
+                    default="{ 'sobjectType': 'Account'}"/>
+    <aura:handler name="init" action="{!c.accept}" value="{!this}" />
+    <!-- User Interface -->
+    	
+    <!--<div class="slds-scrollable slds-p-around_medium slds-text-heading_small" id="modal-content-id-1">
+        <p style="height: 108px; word-wrap: break-word;"><a style="outline: 0;" href="https://github.com/developerforce/LEXComponentsBundle" target="_blank">Sample Lightning Component Action</a></p>
+        <br/>
+    </div>
+    <div class="slds-modal__footer">
+        <lightning:button class="slds-button_brand" onclick="{!c.accept}" label="Accept"/>
+    </div>-->
+        
+    
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

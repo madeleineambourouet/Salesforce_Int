@@ -1,0 +1,3 @@
+<apex:page controller="ChiffrageCtrl">
+<apex:iframe height="1300px" src="{!chiffrageUrl}{!chiffrageId}" scrolling="true" title="{!chiffrageUrl}{!chiffrageId}"/>
+</apex:page>

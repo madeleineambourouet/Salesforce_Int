@@ -1,0 +1,13 @@
+<!--
+  @description       : 
+  @author            : Hassan Dakhcha
+  @group             : 
+  @last modified on  : 12-11-2020
+  @last modified by  : Hassan Dakhcha
+  Modifications Log 
+  Ver   Date         Author           Modification
+  1.0   12-10-2020   Hassan Dakhcha   Initial Version
+-->
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <c:modifierStatutProjetLMSG projectId="{!v.recordId}" onclose="{!c.closeQA}"></c:modifierStatutProjetLMSG>
+</aura:component>

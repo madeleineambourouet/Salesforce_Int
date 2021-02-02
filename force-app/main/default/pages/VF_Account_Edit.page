@@ -1,0 +1,58 @@
+<apex:page standardController="Account" extensions="VFC_Account_Edit" tabStyle="Account" id="page">
+<apex:form id="theForm">
+
+<apex:sectionHeader title="Modification d'un compte" subtitle="{!Account.Name}"/>
+
+<apex:pageBlock mode="edit" title="Modifier Compte" id="pgb_edit">
+        
+    <apex:pageBlockButtons >
+        <apex:commandButton action="{!Save}" value="Enregistrer"/>
+        <apex:commandButton action="{!Cancel}" value="Annuler"/>
+    </apex:pageBlockButtons>
+        
+    <apex:messages />    
+    
+    <apex:repeat value="{!lFieldSetToDisplay}" var="fieldSet">
+
+       <apex:pageBlockSection title="{!fieldSet.label}" columns="2" id="set">
+            <apex:repeat value="{!fieldSet.lFieldMembers}" var="f">
+                
+                <!-- Fields without controls -->
+                <apex:inputField value="{!acc[f]}" rendered="{!CONTAINS(lEmailFields, f) == false && CONTAINS(lPhoneFields, f) == false && CONTAINS(lSIRETFields, f) == false && CONTAINS(lAddressFields, f) == false}"/>
+                
+                <!-- Fields with email control -->
+                <apex:pageBlockSectionItem id="pbsiEmail" rendered="{!CONTAINS(lEmailFields, f) == true}">
+                    <c:VFComp_DQE_Email ctrl="{!pageCont}" emailField="{!acc[f]}" emailFieldAPIName="{!f}" object="Account" id="compEmail"/> 
+                </apex:pageBlockSectionItem>
+        
+                <!-- Fields with phone control -->
+                <apex:pageBlockSectionItem id="pbsiPhone" rendered="{!CONTAINS(lPhoneFields, f) == true}">
+                    <c:VFComp_DQE_Phone ctrl="{!pageCont}" phoneField="{!acc[f]}" phoneFieldAPIName="{!f}" object="Account" id="compPhone"/> 
+                </apex:pageBlockSectionItem>
+                
+                <!-- Fields with siret control -->
+                <apex:pageBlockSectionItem id="pbsiSIRET" rendered="{!CONTAINS(lSIRETFields, f) == true}">
+                    <c:VFComp_DQE_SIRET ctrl="{!pageCont}" SIRETField="{!acc[f]}" SIRETFieldAPIName="{!f}" object="Account" id="compSIRET"/> 
+                </apex:pageBlockSectionItem>
+                
+                <!-- Fields address 1 -->
+                <apex:pageBlockSectionItem id="pbsiAdress1" rendered="{!CONTAINS(lAddress1FieldDisplayComponent, f) == true}">
+                    <c:VFComp_DQE_Address ctrl="{!pageCont}" object="Account" account="{!pageCont.acc}" pays="{!mAddress1Fields['P']}" cp="{!mAddress1Fields['CP']}" rue="{!mAddress1Fields['R']}" number="{!mAddress1Fields['N']}"/>
+                </apex:pageBlockSectionItem>
+                <!-- Fields address 2 -->
+                <apex:pageBlockSectionItem id="pbsiAdress2" rendered="{!CONTAINS(lAddress2FieldDisplayComponent, f) == true}">
+                    <c:VFComp_DQE_Address ctrl="{!pageCont}" object="Account" account="{!pageCont.acc}" pays="{!mAddress2Fields['P']}" cp="{!mAddress2Fields['CP']}" rue="{!mAddress2Fields['R']}" number="{!mAddress2Fields['N']}"/>
+                </apex:pageBlockSectionItem>
+                <!-- Fields address 3 -->
+                <apex:pageBlockSectionItem id="pbsiAdress3" rendered="{!CONTAINS(lAddress3FieldDisplayComponent, f) == true}">
+                    <c:VFComp_DQE_Address ctrl="{!pageCont}" object="Account" account="{!pageCont.acc}" pays="{!mAddress3Fields['P']}" cp="{!mAddress3Fields['CP']}" rue="{!mAddress3Fields['R']}" number="{!mAddress3Fields['N']}"/>
+                </apex:pageBlockSectionItem>
+                
+            </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:repeat>
+        
+</apex:pageBlock>
+
+</apex:form>
+</apex:page>

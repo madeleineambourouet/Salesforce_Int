@@ -1,0 +1,3 @@
+<design:component label="View SDS Document">
+   <design:attribute name="idDocument" label="ID SDS" />
+</design:component>

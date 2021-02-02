@@ -1,0 +1,41 @@
+<!-- 
+* @author Qiuyan LIU
+* @date 08/01/2019
+* @description Wrapper page to make VF CpqSelectProduct not editable 
+ -->
+
+<apex:page standardController="zqu__Quote__c" title="Quote" sidebar="false" extensions="QuoteOptions">
+   <script>
+       if(!document.getElementsByClassName){
+           document.getElementsByClassName = function(className, element){
+               var children = (element || document).getElementsByTagName('*');
+               var elements = new Array();
+               for (var i=0; i<children.length; i++){
+                   var child = children[i];
+                   if((' ' + child.className + ' ').indexOf('' ' + className + ' '') > -1){
+                       elements.push(child);
+                   }
+               }
+               return elements;
+           };
+       }
+       function init() {
+           var headerElements = document.getElementsByClassName('pbHeader');
+           for ( var i=0; i<headerElements.length; i++ ) {
+               headerElements[i].style.display = 'none';
+           }
+       }
+
+       var previousOnload = window.onload;
+       window.onload = function () {
+           if (previousOnload) {
+               previousOnload();
+           }
+           init();
+       };
+   </script>
+   <apex:form >
+       <zqu:CpqSelectProduct options="{!optionsS}" />
+   </apex:form>
+
+</apex:page>

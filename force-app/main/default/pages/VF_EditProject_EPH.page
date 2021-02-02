@@ -1,0 +1,142 @@
+<apex:page standardController="Projet__c" extensions="VFC_EditProject_EPH"  showHeader="false"  sidebar="false"  >
+    <apex:includeScript value="/support/console/46.0/integration.js"/>
+            
+    <script>
+        function testFunction() {
+            //document.getElementById("ThePage:theform:thepageblock:thepbs:csStatus").disabled = true;
+            ownerLockClick();
+            alert("Lock is not realized yet, ownerId");
+        }
+        function fireEvent() {
+             //sforce.console.fireEvent('SampleEvent', 'EventMessage', callback);
+             //$A.get('e.force:refreshView').fire();
+             location.reload();
+
+        }
+    </script>
+    
+   
+    <style type="text/css">
+        .unlock_icon {
+            margin-left: 20px !important;       
+        }
+        
+         . width : {
+            width: 600px !important;       
+        }
+        
+        
+       
+    </style>
+
+    <apex:sectionHeader title="{!$ObjectType.Projet__c.Label}" subtitle="{!curProject.Name}" />
+
+
+    <apex:form styleClass="width">
+        <apex:pageMessages />
+        <apex:pageBlock title="Modifier Projet" mode="edit" >
+            <apex:pageBlockButtons >
+                <apex:commandButton id="saveBtn" action="{!saveProject}" onClick="fireEvent();return false;" value="Enregistrer" disabled="{! AND(isEtatLocked, NOT(isAdmin))}"/>
+                <apex:commandButton action="{!cancelProject}" value="Annuler" />
+                
+                <!-- Ajouter bouton de réouverture d'un projet clos -->                       
+                <apex:commandButton id="OpenBtn" action="{!OpenProject}" value="Réouverture Projet clos" />
+                
+                <!-- Ajouter bouton de cloture manuelle d'un projet --> 
+                <apex:commandButton id="CloseBtn" action="{!CloseProject}" value="Clôture manuelle du projet"/>
+                
+            </apex:pageBlockButtons>
+            <!--  @CMU: 29/05/2019 :commenté suite besoin EPH pour affecter automatiquement le proprietaire du projet suivant les CP et DP
+            <apex:pageMessage summary="{! 'Ce projet est verrouillé par ' + curProject.Proprietaire_du_projet__r.Name } , vous ne pouvez pas le modifier " severity="warning" strength="3" rendered="{! AND(isOwnerLocked, NOT(isAdmin)) }" />-->
+
+            <apex:pageMessage summary="Ce projet est clos, vous ne pouvez pas le modifier" severity="warning" strength="3" rendered="{! AND(isEtatLocked, NOT(isAdmin)) }" />
+            
+            <apex:pageMessage summary="Vous ne pouvez pas clôturer ce projet avec ce sous-statut" severity="error" strength="3" rendered="{! isnotoktoclose }" />
+            
+            <apex:pageMessage summary="La date estimée de début de projet est obligatoire pour les sous-statuts 'Autorisation manquante', 'Demande précoce', 'Achat en attente', 'Financement en attente', 'Modification du projet'" severity="error" strength="3" rendered="{!isDateOk}" />
+            <apex:pageMessage summary="La date estimée doit être renseignée pour certains sous-statuts liés à un projet différé" severity="error" strength="3" rendered="{!isDateKO}" />
+            
+            <apex:pageMessage summary="Modifications prises en compte." severity="sucess" strength="3" rendered="{!issaveOK }" />
+            
+            <!-- @CMU: 29/05/2019 :commenté suite besoin EPH pour affecter automatiquement le proprietaire du projet suivant les CP et DP
+            <apex:pageMessage summary="{! 'Ce projet est verrouillé par ' + curProject.Proprietaire_du_projet__r.Name } , vous ne pouvez pas le modifier " severity="warning" strength="3" rendered="{! AND(isOwnerLocked, NOT(isAdmin)) }" />-->
+            <apex:pageBlockSection title="Statut projet" columns="2" id="statutProjetSection">
+                <apex:inputField value="{!curProject.Statut_Projet__c}" rendered="{! isAdmin }">
+                    <apex:actionSupport event="onchange" reRender="statutProjetSection" action="{!ChangePojectQualifDate}"/>
+                </apex:inputfield>                
+                <apex:pageBlockSectionItem rendered="{! NOT(isAdmin) }">
+                    <apex:outputLabel value="{!$Label.NextProjectStatusLabel}" for="Status"/>
+                     <apex:outputPanel id="Status">
+                        <apex:selectList size="1" value="{! statusSelected }">
+                            <apex:selectOptions value="{!statusOptions}"/>
+                            <apex:actionSupport event="onchange" action="{!statusChange}" reRender="statutProjetSection"/>                           
+                        </apex:selectList>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                
+               
+                
+                <apex:inputField id="test" value="{!curProject.Sous_statut__c}" rendered="{! isAdmin }" />
+                <apex:pageBlockSectionItem rendered="{! NOT(isAdmin) }">
+                    <apex:outputLabel value="{!$ObjectType.Projet__c.Fields.Sous_statut__c.Label}" for="SubStatus"/>
+                    <apex:outputPanel id="SubStatus">
+                        <apex:selectList size="1" value="{! subStatusSelected }">
+                            <apex:selectOptions value="{!subStatusOptions}"/>                           
+                        </apex:selectList>
+                    </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                
+                <apex:inputField value="{!curProject.Date_estimee_debut_projet__c}"/>
+                     
+                <!-- <apex:inputField value="{!curProject.Partenaire_eligible__c}" rendered="{!isAdmin }" />
+                <apex:inputField value="{!curProject.Partenaire_eligible__c}" /> -->
+                <apex:pageBlockSectionItem rendered="{! NOT(isAdmin) }">
+                    <apex:outputLabel value="{!$ObjectType.Projet__c.Fields.Partenaire_eligible__c.Label}" for="SubStatus"/>
+                    <apex:outputPanel id="SubStatus">
+                        <apex:selectList size="1" value="{! subStatusSelected2 }">
+                            <apex:selectOptions value="{!subStatusOptions2}"/>                           
+                        </apex:selectList>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                               
+                <apex:outputText Label="{!$Label.CurrentProjectStatusLabel}"  value="{!statusCurrent}"/>
+                <apex:inputField value="{!curProject.Proprietaire_du_projet__c }"/>
+                <apex:outputField value="{!curProject.Etat__c}" rendered="{! NOT(isAdmin) }"/>
+                <apex:inputField value="{!curProject.Etat__c}" rendered="{! isAdmin }">
+                    
+                    <apex:actionSupport event="onchange" reRender="statutProjetSection" action="{!ChangePojectODCDate}"/>
+                 </apex:inputfield>                
+
+            </apex:pageBlockSection>
+            <!-->
+            <apex:pageBlockSection id="otherInfo" title="Autre" columns="2" >
+                
+             <apex:outputField value="{! curProject.Date_de_Qualification__c }"/>
+                <apex:outputField value="{! curProject.Date_de_debut_ODC_ouverte__c }"/>
+                <apex:inputField value="{! curProject.Date_de_fin_ODC_ouverte__c }"/>
+                <!-- @CMU: 29/05/2019 :commenté suite besoin EPH pour affecter automatiquement le proprietaire du projet suivant les CP et DP
+                <apex:pageBlockSectionItem rendered="{! AND(NOT(isAdmin), false) }" >
+                    <apex:outputLabel value="{!$ObjectType.Projet__c.Fields.Proprietaire_du_projet__c.Label}" for="projectOwner"/>
+                    <apex:outputField id="projectOwner" value="{!curProject.Proprietaire_du_projet__c}" >
+                        <apex:commandButton id="lockBtn" action="{!ownerLockClick}" rerender="statutProjetSection" image="/img/func_icons/util/lock12.gif" rendered="{! AND(ISBLANK(curProject.Proprietaire_du_projet__c), NOT(OR(isOwnerLocked,isEtatLocked)))}" />
+                        <apex:commandButton id="unlockBtn" action="{!ownerLockClick}" rerender="statutProjetSection" image="/img/func_icons/remove12.gif" rendered="{! AND(NOT(ISBLANK(curProject.Proprietaire_du_projet__c)), NOT(OR(isOwnerLocked,isEtatLocked)))}" styleClass="unlock_icon"/>
+                    </apex:outputField>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem rendered="{! AND(isAdmin, false) }" >
+                    <apex:outputLabel value="{!$ObjectType.Projet__c.Fields.Proprietaire_du_projet__c.Label}" for="projectOwner"/>
+                    <apex:outputField id="projectOwner" value="{!curProject.Proprietaire_du_projet__c}" >
+                        <apex:commandButton id="lockBtn" action="{!ownerLockClick}" rerender="statutProjetSection" image="/img/func_icons/util/lock12.gif" rendered="{! ISBLANK(curProject.Proprietaire_du_projet__c)}" />
+                        <apex:commandButton id="unlockBtn" action="{!ownerLockClick}" rerender="statutProjetSection" image="/img/func_icons/remove12.gif" rendered="{! NOT(ISBLANK(curProject.Proprietaire_du_projet__c))}" styleClass="unlock_icon"/>
+                    </apex:outputField>
+                </apex:pageBlockSectionItem> 
+              <apex:inputField value="{!curProject.Proprietaire_du_projet__c }"/>
+              <!-- @CMU: 29/05/2019 :commenté suite besoin EPH pour affecter automatiquement le proprietaire du projet suivant les CP et DP
+              <apex:inputField value="{!curProject.Proprietaire_EPH__c }"/>
+               
+              <!--<apex:inputField value="{!curProject.Souhaite_participer_au_jeu_concours__c}" />
+              
+            </apex:pageBlockSection> -->
+           
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

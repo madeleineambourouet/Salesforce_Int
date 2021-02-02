@@ -1,0 +1,3 @@
+<apex:page standardController="Contact" extensions="VFC_Extension_Contact" action="{!fillCountry}">
+    
+</apex:page>

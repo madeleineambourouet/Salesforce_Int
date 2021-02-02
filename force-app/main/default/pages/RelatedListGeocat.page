@@ -1,0 +1,20 @@
+<apex:page id="geocat_page" standardcontroller="GeoCat__c"  extensions="RelatedListGeocat" showHeader="false" sidebar="false">
+<apex:includeScript value="{!$Resource.jquery}"/>
+	<script>
+	$(function() {
+		
+	});
+    </script>
+
+	<apex:pageBlock title="Compétences" mode="detail" >
+		<apex:pageBlockTable value="{!lComp}" var="comp">
+			 <apex:column value="{!comp.Name}"/>
+			 <apex:column value="{!comp.Niveau1_Key__c}"/>
+			 <apex:column value="{!comp.Niveau_1_libelle__c}"/>
+			 <apex:column value="{!comp.Niveau2_Key__c}"/>
+			 <apex:column value="{!comp.Niveau_2_libelle__c}"/>
+			 <apex:column value="{!comp.Prix__c}"/>
+			 <apex:column value="{!comp.Active__c}"/>
+		</apex:pageBlockTable>
+	</apex:pageBlock>
+</apex:page>

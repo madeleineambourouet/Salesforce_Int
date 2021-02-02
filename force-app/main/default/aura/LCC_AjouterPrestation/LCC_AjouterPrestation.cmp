@@ -1,0 +1,14 @@
+<!--
+  @File Name          : LCC_AjouterPrestation.cmp
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : Hassan Dakhcha
+  @Last Modified On   : 09-08-2020
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    1/24/2020   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component implements="flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId" access="global">
+    <c:ajouterPrestations contactId="{!v.recordId}" onclose="{!c.closeQA}" />
+</aura:component>

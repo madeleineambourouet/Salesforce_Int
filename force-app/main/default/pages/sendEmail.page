@@ -1,0 +1,31 @@
+<apex:page standardController="Projet__c" extensions="sendEmail">
+	
+    <apex:messages />
+    
+	<apex:pageBlock title="Envoyer un e-mail au Particulier">
+		<br />
+		<apex:dataTable value="{!proj}" var="contact" border="1">-->
+			
+            <apex:column >
+				<apex:facet name="header">Name</apex:facet>
+				{!contact.Particulier__r.Name}
+			</apex:column>
+			<apex:column >
+				<apex:facet name="header">Email</apex:facet>
+				{!contact.Particulier__r.PersonEmail}
+			</apex:column>
+		</apex:dataTable>
+    
+		<apex:form >
+		<br /><br />
+			<apex:outputLabel value="Subject" for="Subject"/>:<br />     
+			<apex:inputText value="{!subject}" id="Subject" maxlength="80"/>
+			<br /><br />
+			<apex:outputLabel value="Body" for="Body"/>:<br />     
+			<apex:inputTextarea value="{!body}" id="Body"  rows="10" cols="80"/>           
+			<br /><br /><br />
+			<apex:commandButton value="Send Email" action="{!send}" /> 
+            <apex:commandButton action="{!cancel}" value="Cancel" />
+		</apex:form>
+	</apex:pageBlock>
+</apex:page>

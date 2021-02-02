@@ -1,0 +1,62 @@
+<apex:page >
+
+    <apex:includeScript value="/support/console/25.0/integration.js"/>
+
+    <script type="text/javascript">
+        
+        // Called at the page loading
+        function openNewQuotePage() 
+        {
+            // Open the account converted in a new primary tab
+            sforce.console.openPrimaryTab(null, '/{!$CurrentPage.parameters.AccountId}', false, '{!$CurrentPage.parameters.AccountName}', openSuccess, '{!$CurrentPage.parameters.AccountName}');
+        }
+        
+        // Primary tab opener : handler
+        var openSuccess = function openSuccess(result) 
+        {
+            if (result.success == true) 
+            {
+                // Get the lead page to close it
+              //  sforce.console.getFocusedPrimaryTabId(showTabId);
+                
+                // If success, open a subtab for the proposition
+                var primaryTabId = result.id;
+                sforce.console.openSubtab(primaryTabId , '/apex/zqu__quoteoption?crmAccountId={!$CurrentPage.parameters.AccountId}', false, 'Proposition', null, openSuccessSubtab, 'Proposition');
+                
+            } else 
+            {
+                alert('Primary tab cannot be opened');
+            }
+        };
+        
+        // Sub sub opener : handler
+        var openSuccessSubtab = function openSuccess(result) 
+        {
+            if (result.success == true)
+            { 
+                // Focus the proposition tab 
+                sforce.console.focusSubtabById(result.id, focusSuccess);
+            } else
+            {
+                alert('Sub tab cannot be opened');
+            }
+        };
+        
+        // Subtab focuser : handler
+        var focusSuccess = function focusSuccess(result) 
+        {
+            //Report whether going to the subtab was successful
+            if (result.success == true) 
+            { } 
+            else 
+            {
+                alert('Going to the subtab was not successful');
+            }
+        };
+        
+        // Call at the loading of the page
+        window.onload = openNewQuotePage;
+        
+  </script>
+
+</apex:page>

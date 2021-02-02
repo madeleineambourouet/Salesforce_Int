@@ -1,0 +1,67 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId" controller="DocumentServiceSDS"> <!--inherit recordId attribute-->
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="simpleRecord" type="Object" />
+    <aura:attribute name="recordError" type="String" />
+    <aura:attribute name="fileContents" type="String"/>
+    <aura:attribute name="retour" type="String"/>
+    <aura:attribute name="showLoader" type="String" default="false"/>
+    <aura:attribute name="idDocument" type="String" />
+    <aura:attribute name="fileName" type="String" default="Pas de fichier séléctionné.." />
+    <aura:attribute name="fileType" type="String"/>
+    <aura:attribute name="mimeType" type="String"/>
+    <aura:attribute name="retourMessage" type="String" default=""/>
+    <force:recordData aura:id="record"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      fields="idDocument__c" 
+                      targetFields ="{!v.simpleRecord}"
+                      mode="VIEW"
+                      recordUpdated="{!c.recordUpdate}"/>
+    
+    <aura:if isTrue="{!v.retourMessage == ''}">
+        <div class ="documentDiv slds-is-relative">
+            <div class="modal-header slds-modal__header slds-size_1-of-1">
+                <h4 class="title slds-text-heading--medium" >Ajouter un fichier</h4>
+            </div>
+            <div class="slds-size_1-of-1">
+                <p>Formats acceptés : PDF, JPG, JPEG, PNG</p>
+                <p>Taille max : 4,5 Mo</p>
+            	<hr/>
+            </div>
+            <div class="row">
+                <label for="file" class="label-file slds-file-selector__button slds-button slds-button_neutral">
+                    <lightning:icon iconName="utility:upload" size="x-small"></lightning:icon>&nbsp;&nbsp;Choisir un fichier</label>
+            </div>
+            <div class="row">
+                <input type="file" class="input-file" aura:id="file" id="file" onchange="{!c.handleFilesChange}"/>
+            </div>
+            <div class="row">
+                {!v.fileName}
+            </div>
+            <div class="row">
+                <ui:button label="ENVOYER" press="{!c.save}"/>
+            </div>
+            <aura:if isTrue="{!v.showLoader == 'true'}">
+                <div class="exampleHolder">
+                    <lightning:spinner alternativeText="Loading" size="small" />
+                </div>
+            </aura:if>  
+        </div>
+        <aura:set attribute="else">
+            <div style="position:relative">
+                <div style="background-color:LightBlue;text-align:center">
+                    {!v.retourMessage}
+                </div>
+                <div style="text-align:center;margin-top:100px;">
+                    <ui:button label="Fermer" press="{!c.closeModal}"/>
+                </div>
+                <div style="text-align:center;margin-top:10px;">
+                    <ui:button label="Ajouter un nouveau fichier" press="{!c.ajouterFichier}"/>
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>  
+    
+</aura:component>

@@ -1,0 +1,14 @@
+<!--
+  @File Name          : LCC_synchronizeMatch.cmp
+  @Description        : 
+  @Author             : Hassan Dakhcha
+  @Group              : 
+  @Last Modified By   : Hassan Dakhcha
+  @Last Modified On   : 4/2/2020, 1:35:35 AM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    3/29/2020   Hassan Dakhcha     Initial Version
+-->
+<aura:component implements="flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId" access="global">
+    <c:synchronizeMatch recordId="{!v.recordId}" />
+</aura:component>

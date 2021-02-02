@@ -1,0 +1,71 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="keepon" type="Integer" default="0"/>
+    <aura:attribute name="estValide" type="Boolean" default="true"/>
+    <aura:attribute name="estFerme" type="Boolean" default="false"/>
+    <aura:attribute name="estComplet" type="Boolean" default="true"/>
+    <aura:attribute name="estUnique" type="Boolean" default="true"/>
+    <aura:attribute name="contactOK" type="Boolean" default="true"/>
+
+    <aura:attribute name="choixFermeture" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id" /> 
+    <!--<aura:attribute name="leadRecord" type="Lead"
+                    default="{ 'sobjectType': 'Lead'}"/>-->
+ 
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" description="An error message bound to force:recordData"/>
+    <force:recordData aura:id="record"
+        layoutType="FULL"
+        recordId="{!v.recordId}"
+        targetError="{!v.recordError}"
+        targetRecord="{!v.record}"
+        targetFields ="{!v.simpleRecord}"
+        recordUpdated="{!c.recordUpdated}"
+        mode="EDIT"/> 
+
+    <!-- User Interface -->
+    <div style="font-size:1.3em">{!v.message}</div>
+ 
+    <aura:if isTrue="{!v.estFerme}">
+  		<div style="font-size:1.3em">La piste est fermée ou le préinscrit a déjà été transformé</div>
+  	</aura:if>
+    <aura:if isTrue="{!v.estComplet == false}">
+  		<div style="font-size:1.3em">Merci de renseigner la civilité, le nom et le prénom du contact.</div>
+  	</aura:if>
+    <aura:if isTrue="{!v.contactOK == false}">
+  		<div style="font-size:1.3em">Au moins un des 3 champs Email, Téléphone, Téléphone mobile doit être renseigné.</div>
+  	</aura:if>
+    <aura:if isTrue="{!v.estUnique == false}">
+  		<div style="font-size:1.3em">Cette adresse email existe déjà. Merci d\'en renseigner une autre.</div>
+  	</aura:if>
+    <aura:if isTrue="{!v.estValide == false}">
+  		<div style="font-size:1.3em">Le SIRET n'est pas valide. Merci de vérifier cette information.</div>
+  	</aura:if>
+    <aura:if isTrue="{!v.keepon == 1}">
+  		<div style="font-size:1.3em">Ce SIRET est déjà utilisé par le doublon. Les informations de la piste remplaceront celles du doublon. Voulez-vous continuer?</div>
+  	</aura:if>
+    <aura:if isTrue="{!v.keepon == 2}">
+  		<div style="font-size:1.3em">Nom de société, email et/ou téléphone déjà utilisés par le doublon. Voulez-vous continuer?</div>
+  	</aura:if>
+    <aura:if isTrue="{!v.keepon == 3}">
+  		<div style="font-size:1.3em">Nom de société et email déjà utilisés par le doublon. Voulez-vous continuer?</div>
+  	</aura:if>
+    <aura:if isTrue="{!v.keepon == 1 || v.keepon == 2 || v.keepon == 3}">
+  		<br/>
+        <div style="float:right">
+            <lightning:button variant="brand" 
+                              label="ok"
+                              title="ok"
+                              onclick="{! c.convertirPiste }"/>
+            <lightning:button variant="neutral" 
+                              label="Annuler"
+                              title="Annuler"
+                              onclick="{! c.closeModal }"/>
+        </div>
+  	</aura:if>
+        
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

@@ -1,0 +1,46 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="isEtatClosOrNull" type="Boolean" default="false"/>
+    <aura:attribute name="isMatchingEncours" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id" />     
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" description="An error message bound to force:recordData"/>
+    <force:recordData aura:id="record"
+        layoutType="FULL"
+        recordId="{!v.recordId}"
+        targetError="{!v.recordError}"
+        targetRecord="{!v.record}"
+        targetFields ="{!v.simpleRecord}"
+        recordUpdated="{!c.recordUpdated}"
+        mode="EDIT"/>
+
+    <!-- User Interface -->
+    <div style="font-size:1.3em">{!v.message}</div>
+    <aura:if isTrue="{!v.isEtatClosOrNull}">
+        <div>
+            <div style="font-size:1.3em">L'état de ce projet est clos !</div>
+            <br/>
+            <div style="float:right">
+                <lightning:button variant="brand" 
+                                              label="ok"
+                                              title="ok"
+                                              onclick="{! c.closeModal }"/>
+            </div>
+        </div>
+  	</aura:if>
+    <aura:if isTrue="{!v.isMatchingEncours}">
+        <div>
+            <div style="font-size:1.3em">Matching en cours sur ce projet!</div>
+            <br/>
+            <div style="float:right">
+                <lightning:button variant="brand" 
+                                              label="ok"
+                                              title="ok"
+                                              onclick="{! c.closeModal }"/>
+            </div>
+        </div>
+  	</aura:if>   
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

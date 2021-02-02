@@ -1,0 +1,10 @@
+<apex:page standardController="Account" extensions="GodSon" recordSetVar="accounts" showHeader="true" sidebar="true">
+	
+	<apex:form id="search">
+	<apex:inputText value="{!text}"/><apex:commandButton value="search" action="{!getItems}"/>
+	        <apex:selectList size="10" value="{!IdFilleul}" multiselect="false">
+	            <apex:selectOptions value="{!items}"/>
+	            </apex:selectList><p/>
+	            <apex:commandButton value="save" action="{!save}"/>
+	     </apex:form>
+</apex:page>

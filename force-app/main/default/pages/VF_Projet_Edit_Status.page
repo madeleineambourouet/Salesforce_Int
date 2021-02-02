@@ -1,0 +1,35 @@
+<apex:page standardController="Projet__c">
+<apex:form id="theForm">
+<apex:sectionHeader title="Modification du Projet" subtitle="{!Projet__c.Name}"/>
+<apex:pageBlock mode="edit" title="Modifier Projet" id="pgb_edit">
+        
+    <apex:pageBlockButtons >
+        <apex:commandButton action="{!Save}" value="Enregistrer"/>
+        <apex:commandButton action="{!Cancel}" value="Annuler"/>
+    </apex:pageBlockButtons>
+    
+    <apex:pageBlockSection title="Statut projet" columns="2">
+
+        <apex:inputField value="{!Projet__c.Statut_Projet__c}"  />
+        <apex:inputField value="{!Projet__c.Sous_statut__c}"  />
+         <!--<apex:inputField value="{!Projet__c.Statut__c}" required="true" /> -->
+         <apex:inputField value="{!Projet__c.Etat__c}"  />
+         <apex:inputField value="{!Projet__c.Proprietaire_du_projet__c}" />
+         
+      </apex:pageBlockSection>
+        
+      <apex:pageBlockSection title="Informations" columns="2">                              
+       
+        <!--<apex:inputField value="{!Projet__c.Motif__c}" required="{!OR($Profile.Name=='Service Commercial',$Profile.Name=='Service Client',$Profile.Name=='Service Consommateur')}" /> -->
+        <apex:inputField value="{!Projet__c.Type_de_reference__c}" />
+         <apex:inputField value="{!Projet__c.Source__c}" />       
+         <apex:inputField value="{!Projet__c.Souhaite_participer_au_jeu_concours__c}" />
+         <apex:inputField value="{!Projet__c.Matching_Demande__c}"/>
+         <apex:inputField value="{!Projet__c.Categorie_lkp__c}"/>
+         
+       </apex:pageBlockSection>
+       
+   
+</apex:pageBlock>
+</apex:form>
+</apex:page>

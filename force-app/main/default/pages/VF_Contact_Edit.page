@@ -1,0 +1,53 @@
+<apex:page standardController="Contact" extensions="VFC_Contact_Edit" tabStyle="Contact" id="page">
+<apex:form id="theForm">
+
+<apex:sectionHeader title="Modification d'un contact" subtitle="{!Contact.Name}"/>
+
+<apex:pageBlock mode="edit" title="Modifier Contact" id="pgb_edit">
+        
+    <apex:pageBlockButtons >
+        <apex:commandButton action="{!Save}" value="Enregistrer"/>
+        <apex:commandButton action="{!Cancel}" value="Annuler"/>
+    </apex:pageBlockButtons>
+    
+    <apex:messages />
+    
+    <!--{!$ObjectType.Account.FieldSets.PRO}-->
+    <apex:repeat value="{!lFieldSetToDisplay}" var="fieldSet">
+
+       <apex:pageBlockSection title="{!fieldSet.label}" columns="2" id="set">
+            <apex:repeat value="{!fieldSet.lFieldMembers}" var="f">
+                
+                <!-- Fields without controls -->
+                <apex:inputField value="{!ctc[f]}" rendered="{!CONTAINS(lEmailFields, f) == false && CONTAINS(lPhoneFields, f) == false && CONTAINS(lAddressFields, f) == false}"/>
+                
+                <!-- Fields with email control -->
+                <apex:pageBlockSectionItem id="pbsiEmail" rendered="{!CONTAINS(lEmailFields, f) == true}">
+                    <c:VFComp_DQE_Email ctrl="{!pageCont}" emailField="{!ctc[f]}" emailFieldAPIName="{!f}" object="Contact" id="contactEmail"/> 
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem id="pbsiPhone" rendered="{!CONTAINS(lPhoneFields, f) == true}">
+                    <c:VFComp_DQE_Phone ctrl="{!pageCont}" phoneField="{!ctc[f]}" phoneFieldAPIName="{!f}" object="Contact" id="ctcPhone"/> 
+                </apex:pageBlockSectionItem>
+          
+                <!-- Fields address 1 -->
+                <apex:pageBlockSectionItem id="pbsiAdress1" rendered="{!CONTAINS(lAddress1FieldDisplayComponent, f) == true}">
+                    <c:VFComp_DQE_Address ctrl="{!pageCont}" object="Contact" contact="{!pageCont.ctc}" pays="{!mAddress1Fields['P']}" cp="{!mAddress1Fields['CP']}" rue="{!mAddress1Fields['R']}" number="{!mAddress1Fields['N']}"/>
+                </apex:pageBlockSectionItem>
+                <!-- Fields address 2 -->
+                <apex:pageBlockSectionItem id="pbsiAdress2" rendered="{!CONTAINS(lAddress2FieldDisplayComponent, f) == true}">
+                    <c:VFComp_DQE_Address ctrl="{!pageCont}" object="Contact" contact="{!pageCont.ctc}" pays="{!mAddress2Fields['P']}" cp="{!mAddress2Fields['CP']}" rue="{!mAddress2Fields['R']}" number="{!mAddress2Fields['N']}"/>
+                </apex:pageBlockSectionItem>
+                <!-- Fields address 3 -->
+                <apex:pageBlockSectionItem id="pbsiAdress3" rendered="{!CONTAINS(lAddress3FieldDisplayComponent, f) == true}">
+                    <c:VFComp_DQE_Address ctrl="{!pageCont}" object="Contact" contact="{!pageCont.ctc}" pays="{!mAddress3Fields['P']}" cp="{!mAddress3Fields['CP']}" rue="{!mAddress3Fields['R']}" number="{!mAddress3Fields['N']}"/>
+                </apex:pageBlockSectionItem>
+          
+            </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:repeat>
+        
+</apex:pageBlock>
+
+</apex:form>
+</apex:page>

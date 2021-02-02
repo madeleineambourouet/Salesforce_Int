@@ -1,0 +1,16 @@
+<apex:page >
+    <script>
+        
+        var previousOnload = window.onload;        
+        window.onload = function() { 
+            init();
+        }
+        
+        function init() {
+            var pageURL = window.location.hostname; 
+            //alert('Hello!! =  {!$Api.Session_ID} -- {!$Api.Partner_Server_URL_100} --{!$CurrentPage.parameters.QID}');
+            window.open('/apex/zqu__zqgeneratepdf?SID={!$Api.Session_ID}&SURL={!$Api.Partner_Server_URL_100}&QID={!$CurrentPage.parameters.QID}&format=pdf','_self');
+        }
+    </script>
+
+</apex:page>

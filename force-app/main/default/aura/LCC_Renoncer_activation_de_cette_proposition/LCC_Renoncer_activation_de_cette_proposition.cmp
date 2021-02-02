@@ -1,0 +1,42 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="confirmRenoncer" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id" />  
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- User Interface -->
+    <aura:if isTrue="{! v.message != '' }">
+        <div>
+            <p style="font-size:1.1em;color:red">{!v.message}</p>
+            <br/>
+            <div style="float:right">
+                <lightning:button variant="brand" 
+                                  label="ok"
+                                  title="ok"
+                                  onclick="{! c.closeModal }"/>
+            </div>
+        </div>
+  	</aura:if>
+    <aura:if isTrue="{! and(v.message == '',v.confirmRenoncer == false) }">
+  		<div style="font-size:1.3em">Traitement en cours</div>
+  	</aura:if>
+    <aura:if isTrue="{! and(v.message == '',v.confirmRenoncer == true) }">
+  		<div style="font-size:1.1em">Voulez-vous vraiment renoncer à l’activation prévue de cette proposition ?</div>
+        <br/>
+        <div style="float:right">
+            <lightning:button variant="brand" 
+                              label="ok"
+                              title="ok"
+                              onclick="{! c.confirmRenoncerActivation }"/>
+            <lightning:button variant="neutral" 
+                              label="annuler"
+                              title="annuler"
+                              onclick="{! c.closeModal }"/>
+        </div>
+  	</aura:if>
+        
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

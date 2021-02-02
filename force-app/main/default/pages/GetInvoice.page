@@ -1,0 +1,4 @@
+<apex:page standardcontroller="Zuora__ZInvoice__c" extensions="GetInvoice" action="{!saveInv}" showHeader="false" sidebar="false">
+	<apex:outputPanel style="font-family: Courier New;font-size: 50px;text-align: left;position: absolute;top: 30%;left: 20%;">{!code}</apex:outputPanel>
+	<apex:outputPanel style="font-family: Courier New;font-size: 40px;text-align: left;position: absolute;top: 40%;left: 20%;">{!errorPdf}</apex:outputPanel>
+</apex:page>

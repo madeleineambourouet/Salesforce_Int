@@ -1,0 +1,41 @@
+<!--
+  @File Name          : TaroEditComponent.cmp
+  @Description        : 
+  @Author             : Hassan Dakhcha
+  @Group              : 
+  @Last Modified By   : Hassan Dakhcha
+  @Last Modified On   : 6/22/2020, 6:05:31 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    6/19/2020   Hassan Dakhcha     Initial Version
+-->
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" access="global">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="sObjectName" type="String" />
+    <aura:attribute name="projectRecord" type="Object"/>
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="projectLocked" type="Boolean" default="false"/>
+    <force:recordData   aura:id="recordLoader"
+                        recordId="{!v.recordId}"
+                        fields="Statut__c"
+                        targetFields="{!v.projectRecord}"
+                        recordUpdated="{!c.doInit}"
+    />
+    <aura:handler event="force:refreshView" action="{!c.init}"/>
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:handler event="lightning:tabClosed" action="{! c.onTabClosed }"/>
+    
+    <aura:if isTrue="{!v.projectLocked}">
+        <div class="slds-text-heading_large" > </div>
+        <div class="slds-text-heading_medium .slds-text-title_bold slds-text-color_error"> Vous ne pouvez pas modifier vous ne pouvez pas modifier un projet qui est déjà publié</div>
+      <aura:set attribute="else">
+            <aura:if isTrue="{!v.message != '' }">
+                <div style="font-size:1.3em">Chargement en cours ...</div>
+            </aura:if>
+        </aura:set>
+    </aura:if> 
+        
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

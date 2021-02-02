@@ -1,0 +1,5 @@
+<apex:page controller="VFC_Export_Expansion_Account" action="{!VFC_Export_Expansion_Account}" readOnly="true" contentType="application/vnd.ms-excel#liste_services_actifs.csv">{!header}
+  <apex:repeat value="{!lstwrapper}" var="x">
+;;;{!x.CodeClientPointP};;;;;;;;;;;;;{!x.isClient};;;;;{!x.hasCapRenovOffre};;;;;;;;;{!x.hasIntermedOffre}
+  </apex:repeat>
+</apex:page>

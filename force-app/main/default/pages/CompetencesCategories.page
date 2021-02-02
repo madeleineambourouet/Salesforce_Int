@@ -1,0 +1,23 @@
+<apex:page showHeader="true" sidebar="false" Controller="CompetencesCategories">
+	<apex:includeScript value="{!$Resource.jquery}" />
+    <script type="text/javascript">
+    	$(function() {
+    		
+    	});
+    </script>
+	<apex:form id="form" >
+		<apex:pageBlock title="{!nivo1} / {!nivo2}" id="pageblock">
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!savemapping}" image="{!URLFOR($Label.icon_save)}" rendered="{!render}"/>
+                <apex:commandButton action="{!backsavemapping}" image="{!URLFOR($Label.icon_back)}" />
+			</apex:pageBlockButtons>
+			<apex:pageBlockTable title="{!nivo1} - {!nivo2}" value="{!currentMapping}" var="map">
+				<apex:column headerValue="Catégorie" value="{!map.mapping.Categorie_libelle__c}"/>
+				<apex:column rendered="{!render}">
+					<apex:inputCheckbox value="{!map.inclus}"/>
+				</apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+		<apex:messages />
+	</apex:form>
+</apex:page>

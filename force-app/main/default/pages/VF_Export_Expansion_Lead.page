@@ -1,0 +1,5 @@
+<apex:page controller="VFC_Export_Expansion_Lead" action="{!VFC_Export_Expansion_Lead}" readOnly="true" contentType="application/vnd.ms-excel#liste_leads.csv">{!header}
+  <apex:repeat value="{!lstwrapper}" var="x">
+{!x.IDLead};{!x.DateSelecPro};;{!x.LibelleLead};;;{!x.CodePostal};{!x.Ville};;;;{!x.CodeClientPointP};;{!x.Statut}
+  </apex:repeat>
+</apex:page>

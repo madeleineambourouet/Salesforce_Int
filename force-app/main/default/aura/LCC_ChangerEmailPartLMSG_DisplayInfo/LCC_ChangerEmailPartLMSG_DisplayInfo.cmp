@@ -1,0 +1,28 @@
+<!--
+  @description       : 
+  @author            : Hassan Dakhcha
+  @group             : 
+  @last modified on  : 09-10-2020
+  @last modified by  : Hassan Dakhcha
+  Modifications Log 
+  Ver   Date         Author           Modification
+  1.0   09-08-2020   Hassan Dakhcha   Initial Version
+-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <lightning:card variant="narrow"> 
+            <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Account">
+                <div class="slds-m-left_x-large slds-text-heading_medium" >
+                    <p>
+                        <lightning:formattedRichText value="&lt;b&gt;Procédure de changement de l'email en cours ...&lt;b&gt;" class="slds-text-color_success" />
+                    </p>
+                    <p> 
+                        <lightning:formattedRichText value="&lt;b&gt;L'utilisateur (Pro/Part) va recevoir un email de validation de la modification. Une fois la validation effectuée, le changement sera effectif&lt;b&gt;" />
+                    </p>
+                    <p> 
+                        <lightning:formattedRichText value="Voici le nouvel email : "/>
+                        <lightning:outputField fieldName="new_email__c" variant="label-hidden" />
+                    </p>
+                </div>
+            </lightning:recordViewForm>
+    </lightning:card>
+</aura:component>

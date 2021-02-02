@@ -1,0 +1,139 @@
+<!--
+  @File Name          : TaroCreatePage.page
+  @Description        : 
+  @Author             : Hassan Dakhcha
+  @Group              : 
+  @Last Modified By   : Hassan Dakhcha
+  @Last Modified On   : 5/29/2020, 12:11:00 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    5/29/2020   Hassan Dakhcha     Initial Version
+-->
+<apex:page controller="TaroCreate">
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="{!urlTaroCSS}"/>
+        <style>
+            .loaderParent{
+              position:absolute;
+              top:0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: gray;
+              opacity: 0.5;
+            }
+            .loader {
+              border: 5px solid #f3f3f3;
+              border-radius: 50%;
+              border-top: 5px solid #3498db;
+              width: 20px;
+              height: 20px;
+              -webkit-animation: spin 2s linear infinite; /* Safari */
+              animation: spin 2s linear infinite;
+              position:absolute;
+              top:45%;
+              left: 45%;
+            }
+
+            /* Safari */
+            @-webkit-keyframes spin {
+              0% { -webkit-transform: rotate(0deg); }
+              100% { -webkit-transform: rotate(360deg); }
+            }
+
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+        </style>
+        <apex:slds />
+    </head>    
+    <body style="background-color: #FFFFFF">
+      <apex:pageMessages escape="false"/>
+      <div style="{!IF((showTaro == True) && (hasErrors==false), 'display:block', 'display:none')}">
+        <taro-funnel data-env="{!urlTaroEnvironnement}" context="sg" callback="callbackFunction"/>
+        
+        <script async="true" type="text/javascript" src="{!urlTaroJS}"></script>
+        <script>
+            function sendVariable(parameter){
+              document.getElementById('{!$Component.apForm.myHiddenValue}').value = parameter;
+                var hiddenValue = document.getElementById('{!$Component.apForm.myHiddenValue}').value;
+                passValueToController();
+            }
+            window.callbackFunction = function (param) {
+                document.getElementById('idLoaderParent').style="display:block";
+                sendVariable(param);
+            }
+        </script>
+        <apex:form id="apForm">
+            <!-- Declare a hidden field and bind it to required variable in controller using value attribute -->
+            <apex:inputHidden value="{!jsonFromTaro}" id="myHiddenValue"/>
+            
+            <!-- Action function for the rerendering the hidden variable-->
+            <apex:actionFunction name="passValueToController" action="{!processTaroData}" />
+            <style>
+                    body button, body .x-btn, body .btn, body .btnDisabled, body .btnCancel, body .menuButton .menuButtonButton {
+                    color: #333;
+                    margin: 1px;
+                    padding: 2px 3px;
+                    border: 1px solid #b5b5b5;
+                    border-bottom-color: #7f7f7f;
+                    background: #000000;
+                    font-weight: bold;
+                    font-size: .9em;
+                    -moz-border-radius: 3px;
+                    -webkit-border-radius: 3px;
+                    border-radius: 3px;
+                    }
+                </style>
+        </apex:form>
+        <div class="loaderParent" id="idLoaderParent" style="display:none"><div class="loader"></div></div>
+      </div>
+      <div style="width:100%;text-align: left;padding-left: 20%;padding-top: 50px;">
+        <div style="{!IF((showTaro == False) && (hasErrors==false), 'display:block', 'display:none')};">
+          <apex:form >
+              <div>
+              <span style="font-weight: bold">Quand souhaitez-vous que les travaux débutent ? *</span>
+              <br/>
+              <apex:inputField value="{! projetLmsgRecord.Delai_souhaite_avant_debut_travaux__c }" required="true"/>
+              </div>
+              <br/>
+
+              <div style="width:70%;">
+              <span style="font-weight: bold">Où en êtes-vous dans vos recherches ? *</span>
+              <br/>
+              <apex:inputField value="{! projetLmsgRecord.Etape_recherches__c }" required="true"/>
+              </div>
+              <br/>
+
+              <div>
+              <span style="font-weight: bold">Avez-vous les autorisations pour réaliser vos travaux ? </span><span>(facultatif) </span>
+              <br/>
+              <apex:inputField value="{! projetLmsgRecord.Autorisations_travaux__c }"/>
+              </div>
+              <br/>
+
+              <div>
+              <span style="font-weight: bold">Etes-vous ? *</span>
+              <br/>
+              <apex:inputField value="{! projetLmsgRecord.Proprietaire_Locataire__c }" required="true"/>
+              </div>
+              <br/>
+
+              <div>
+              <span style="font-weight: bold">Avez-vous des précisions à apporter à votre projet ? </span><span>(facultatif) </span>
+              <br/>
+              <apex:inputField value="{! projetLmsgRecord.Description__c }"/>
+              </div>
+              <br/>
+          
+              <apex:commandButton action="{! updateQuestion }" value="Enregistrer et fermer" style="background-color:#004487;color:#FFFFFF"/>
+      
+          </apex:form>
+        </div>
+      </div>
+    </body>
+</html>
+</apex:page>

@@ -1,0 +1,328 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId" controller="LLC_Editproject">
+    <aura:attribute name="projetVariables" type="Object" />
+    <aura:attribute name="projetError" type="String" />
+    <aura:attribute name="recordId" type="Id" /> 
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="Etat" type="String" />
+    <aura:attribute name="simpleRecord" type="Object" />
+    <aura:attribute name="recordError" type="String" />
+    <aura:attribute name="isVisbleClotureMotif" type="Boolean" default="false"/> 
+    <aura:attribute name="MotifEmpty" type="Boolean"/>   
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 80rem !important;
+        width:80% !important;
+        }
+    </aura:html>
+    <!-- User Interface -->
+    <aura:if isTrue="{!v.projetVariables.isAdmin == true}">
+        <aura:if isTrue="{!v.isVisbleClotureMotif == false}">
+            <div>
+                <h1 style="font-size:1.3em;text-align:center">Modifier Projet - Modification du statut</h1>
+                <hr/>
+                <lightning:recordEditForm
+                                          aura:id="editFormAdmin"
+                                          onload="{!c.handleLoad}"
+                                          onsubmit="{!c.handleSubmit}"
+                                          onsuccess="{!c.handleSuccess}"
+                                          recordId="{!v.recordId}"
+                                          objectApiName="Projet__c">
+                    
+                    
+                    <div style="text-align:center;margin-bottom:5px">
+                        <aura:if isTrue="{!v.projetVariables.isAdmin != true}">
+                            <aura:if isTrue="{!v.projetVariables.isEtatLocked == true}">
+                                <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                    <div class="slds-notify__content">
+                                        <p style="font-size:1.1em">Ce projet est clos, vous ne pouvez pas le modifier</p>
+                                    </div>
+                                </div>
+                            </aura:if> 
+                        </aura:if> 
+                        <aura:if isTrue="{!v.projetVariables.isnotoktoclose == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">Vous ne pouvez pas clôturer ce projet avec ce sous-statut</p>
+                                </div>
+                            </div>
+                        </aura:if> 
+                        <aura:if isTrue="{!v.projetVariables.messageError != ''}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">{!v.projetVariables.messageError}</p>
+                                </div>
+                            </div>
+                        </aura:if> 
+                        <aura:if isTrue="{!v.projetVariables.isDateOk == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">La date estimée de début de projet est obligatoire pour les sous-statuts 'Autorisation manquante', 'Demande précoce', 'Achat en attente', 'Financement en attente', 'Modification du projet'</p>
+                                </div>
+                            </div>
+                        </aura:if>
+                         <aura:if isTrue="{!v.projetVariables.isMotifRefusOK == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">Le motif de refus sur le projet est obligatoire pour le sous-statut 'Refus de l’offre LMSG'</p>
+                                </div>
+                            </div>
+                        </aura:if>
+                         <aura:if isTrue="{!v.projetVariables.isMotifRefusKO == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">Le motif de refus doit être renseignée pour le sous-statut 'Refus de l’offre' LMSG liés à un projet Hors cible</p>
+                                </div>
+                            </div>
+                        </aura:if> 
+                        <aura:if isTrue="{!v.projetVariables.isDateKO == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">La date estimée doit être renseignée pour certains sous-statuts liés à un projet différé</p>
+                                </div>
+                            </div>
+                        </aura:if>
+                       
+                        <aura:if isTrue="{!v.projetVariables.issaveOK == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_success">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">Modifications prises en compte.</p>            
+                                </div>
+                            </div>
+                        </aura:if> 
+                        <aura:if isTrue="{!v.MotifEmpty == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_error">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">Motif de clôture: Vous devez saisir une valeur</p>               
+                                </div>
+                            </div>
+                        </aura:if> 
+                    </div>
+                    <div>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning:inputField aura:id="statutProjetAdmin" fieldName="Statut_Projet__c"  onchange="{!c.changePojectQualifDate}"/>
+                                <lightning:inputField aura:id="dateEstimeeDebutProjetAdmin" type="date" fieldName="Date_estimee_debut_projet__c" />
+                                <lightning:inputField aura:id="MotifRefusProjetAdmin" type="text" fieldName="Motif_de_refus__c" />
+                                <lightning:inputField aura:id="proprietaireProjetAdmin" fieldName="Proprietaire_du_projet__c" />
+                            </div>
+                            <div class="slds-col">
+                                <lightning:inputField aura:id="subStatutProjetAdmin" fieldName="Sous_statut__c" /><label class="slds-form-element__label" for="statutProjetActuelAdmin"><span class="" >Statut actuel</span></label>
+                                <lightning:outputField aura:id="statutProjetActuelAdmin" fieldName="Statut_Projet__c" variant="label-hidden" />
+                                <lightning:inputField aura:id="etatProjetActuelAdmin" fieldName="Etat__c" />
+                            </div>
+                        </div>
+                        <br/>
+                        <div style="align:center">
+                            <lightning:button variant="neutral" 
+                                              label="Enregistrer"
+                                              title="Enregistrer"
+                                              onclick="{! c.saveProjectAdmin }"
+                                              disabled="{!v.projetVariables.isEtatLocked }"/>
+                            <lightning:button variant="neutral" 
+                                              label="Annuler"
+                                              title="Annuler"
+                                              onclick="{! c.cancelProject }"/>
+                            <!-- Ajouter bouton de réouverture d'un projet clos -->    
+                            <lightning:button variant="neutral" 
+                                              label="Réouverture Projet clos"
+                                              title="Réouverture Projet clos"
+                                              onclick="{! c.openProject }"/>
+                            <!-- Ajouter bouton de cloture manuelle d'un projet --> 
+                            <lightning:button variant="neutral" 
+                                              label="Clôture manuelle du projet"
+                                              title="Clôture manuelle du projet"
+                                              onclick="{! c.closeProject }"/>
+                            <aura:if isTrue="{!v.projetVariables.isAdmin != true}">
+                        		<lightning:button variant="neutral" 
+                                            label="Actualiser"
+                                          	title="Actualiser"
+                                          	onclick="{! c.doInit }"/>
+                            </aura:if>
+                        </div>
+                    </div>       
+                </lightning:recordEditForm>
+            </div>
+        </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!v.projetVariables.isAdmin != true}">
+        <aura:if isTrue="{!v.isVisbleClotureMotif == false}">
+            <div>
+                <h1 style="font-size:1.3em;text-align:center">Modifier Projet - Modification du statut</h1>
+                <hr/>
+                <lightning:recordEditForm
+                                          aura:id="editFormNonAdmin"
+                                          onload="{!c.handleLoad}"
+                                          onsubmit="{!c.handleSubmit}"
+                                          onsuccess="{!c.handleSuccess}"
+                                          recordId="{!v.recordId}"
+                                          objectApiName="Projet__c">
+                    
+                    
+                    <div style="text-align:center;margin-bottom:5px">
+                        <aura:if isTrue="{!v.projetVariables.isAdmin != true}">
+                            <aura:if isTrue="{!v.projetVariables.isEtatLocked == true}">
+                                <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                    <div class="slds-notify__content">
+                                        <p style="font-size:1.1em">Ce projet est clos, vous ne pouvez pas le modifier</p>
+                                    </div>
+                                </div>
+                            </aura:if> 
+                        </aura:if> 
+                        <aura:if isTrue="{!v.projetVariables.isnotoktoclose == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">Vous ne pouvez pas clôturer ce projet avec ce sous-statut</p>
+                                </div>
+                            </div>
+                        </aura:if> 
+                        <aura:if isTrue="{!v.projetVariables.isDateOk == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">La date estimée de début de projet est obligatoire pour les sous-statuts 'Autorisation manquante', 'Demande précoce', 'Achat en attente', 'Financement en attente', 'Modification du projet'</p>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.projetVariables.isMotifRefusOK == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">Le motif de refus sur le projet est obligatoire pour le sous-statut 'Refus de l’offre LMSG' </p>
+                                </div>
+                            </div>
+                        </aura:if> 
+                        <aura:if isTrue="{!v.projetVariables.isDateKO == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">La date estimée doit être renseignée pour certains sous-statuts liés à un projet différé</p>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.projetVariables.isMotifRefusKO == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_warning">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">Le motif de refus sur le projet est obligatoire pour le sous-statut 'Refus de l’offre LMSG'</p>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.projetVariables.issaveOK == true}">
+                            <div class="slds-notify slds-notify_toast slds-theme_success">
+                                <div class="slds-notify__content">
+                                    <p style="font-size:1.1em">Modifications prises en compte.</p>            
+                                </div>
+                            </div>
+                        </aura:if> 
+                    </div>
+                    <div>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning:select aura:id="statutProjetNonAdmin" name="statutProjetSection" label="Statut projet" onchange="{!c.statusChangeNonAdmin}">
+                                    <aura:iteration items="{!v.projetVariables.statusOptions}" var="item">
+                                        <option text="{!item.label}" value="{!item.value}" selected="{! item.value == v.projetVariables.statusSelected ? true:false}"/>
+                                    </aura:iteration>
+                                </lightning:select>
+                                <lightning:inputField aura:id="DateEstimeeDebutProjetNonAdmin" type="date" fieldName="Date_estimee_debut_projet__c" />
+                                <lightning:inputField aura:id="MotifRefusProjetNonAdmin" type="text" fieldName="Motif_de_refus__c" />
+                                <label class="slds-form-element__label" for="statutProjetActuelNonAdmin"><span class="" >Statut actuel</span></label>
+                                <lightning:outputField aura:id="statutProjetActuelNonAdmin" fieldName="Statut_Projet__c" variant="label-hidden" />
+                                <lightning:outputField aura:id="etatProjetActuelNonAdmin" fieldName="Etat__c" />
+                            </div>
+                            <div class="slds-col">
+                                <lightning:select aura:id="subStatutProjetNonAdmin" name="SubStatus" label="Sous-statut" value="{!v.projetVariables.subStatusSelected}">
+                                    <aura:iteration items="{!v.projetVariables.subStatusOptions}" var="item">
+                                        <option text="{!item.label}" value="{!item.value}" selected="{! item.value == v.projetVariables.subStatusSelected ? true:false}"/>
+                                    </aura:iteration>
+                                </lightning:select>
+                                <lightning:select aura:id="subStatutProjet2NonAdmin" name="subStatusSelected2" label="Partenaire éligible" value="{!v.projetVariables.subStatusSelected2}">
+                                    <aura:iteration items="{!v.projetVariables.subStatusOptions2}" var="item">
+                                        <option text="{!item.label}" value="{!item.value}" selected="{! item.value == v.projetVariables.subStatusSelected2 ? true:false}"/>
+                                    </aura:iteration>
+                                </lightning:select>
+                                <lightning:inputField aura:id="ProprietaireProjetNonAdmin" fieldName="Proprietaire_du_projet__c" />
+                            </div>
+                        </div>
+                        <br/>
+                        <div style="align:center">
+                            <lightning:button variant="neutral" 
+                                              label="Enregistrer"
+                                              title="Enregistrer"
+                                              onclick="{! c.saveProjectNonAdmin }"
+                                              disabled="{!v.projetVariables.isEtatLocked }"/>
+                            <lightning:button variant="neutral" 
+                                              label="Annuler"
+                                              title="Annuler"
+                                              onclick="{! c.cancelProject }"/>
+                            <!-- Ajouter bouton de réouverture d'un projet clos -->    
+                            <lightning:button variant="neutral" 
+                                              label="Réouverture Projet clos"
+                                              title="Réouverture Projet clos"
+                                              onclick="{! c.openProject }"/>
+                            <!-- Ajouter bouton de cloture manuelle d'un projet --> 
+                            <lightning:button variant="neutral" 
+                                              label="Clôture manuelle du projet"
+                                              title="Clôture manuelle du projet"
+                                              onclick="{! c.closeProject }"/>
+                            <aura:if isTrue="{!v.projetVariables.isAdmin != true}">
+                        		<lightning:button variant="neutral" 
+                                            label="Actualiser"
+                                          	title="Actualiser"
+                                          	onclick="{! c.doInit }"/>
+                            </aura:if>
+                        </div>
+                    </div>       
+                </lightning:recordEditForm>
+            </div>
+        </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!v.isVisbleClotureMotif == true}">
+        <!--<c:LLC_MotifClotureProjet recordId ="{!v.recordId}" />-->
+        <div>
+            <h1 style="font-size:1.3em;text-align:center">Motif de Clôture</h1>
+            <hr/>
+            <lightning:recordEditForm
+                                      aura:id="editFormClotureProjetNonAdmin"
+                                      onsubmit="{!c.handleSubmitMotifCloture}"
+                                      recordId="{!v.recordId}"
+                                      objectApiName="Projet__c">
+                
+                
+                <div style="text-align:center;margin-bottom:5px">
+                    <aura:if isTrue="{!v.MotifEmpty == true}">
+                        <div class="slds-notify slds-notify_toast slds-theme_warning">
+                            <div class="slds-notify__content">
+                                <p style="font-size:1.1em">Motif de clôture: Vous devez saisir une valeur</p>               
+                            </div>
+                        </div>
+                    </aura:if> 
+                </div>
+                <div>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <lightning:inputField aura:id="statutProjetActuelNonAdmin_cloture" fieldName="Statut_Projet__c" disabled="true"/>
+                            <lightning:inputField aura:id="motifClotureNonAdmin_cloture" fieldName="Motif_de_cloture__c"/>
+                            
+                        </div>
+                        <div class="slds-col">
+                            <lightning:inputField aura:id="subStatutProjetActuelNonAdmin_cloture" fieldName="Sous_statut__c" disabled="true"/>
+                            <lightning:inputField aura:id="etatNonAdmin_cloture" fieldName="Etat__c" disabled="true"/>
+                        </div>
+                        
+                    </div>
+                    <br/>
+                    <div style="float:center">
+                        <lightning:button variant="neutral" 
+                                          label="Enregistrer"
+                                          title="Enregistrer"
+                                          type="submit" />
+                        <lightning:button variant="neutral" 
+                                          label="Annuler"
+                                          title="Annuler"
+                                          onclick="{! c.cancelProjectMotifCloture }"/>
+                    </div>
+                </div>       
+            </lightning:recordEditForm>
+        </div>
+    </aura:if>
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+    
+</aura:component>

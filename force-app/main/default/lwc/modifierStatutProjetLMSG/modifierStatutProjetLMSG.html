@@ -1,0 +1,101 @@
+<!--
+  @description       : 
+  @author            : Hassan Dakhcha
+  @group             : 
+  @last modified on  : 01-21-2021
+  @last modified by  : Hassan Dakhcha
+  Modifications Log 
+  Ver   Date         Author           Modification
+  1.0   12-10-2020   Hassan Dakhcha   Initial Version
+-->
+<template>
+    <div class="slds-box">
+            <div class="slds-text-color_inverse slds-text-heading_medium slds-text-align_center slds-text-title_bold slds-p-around_small" style="padding:0.5rem;background:#4b177c">
+                Statut Actuel: {StatusLabel}
+            </div>
+        <div class="slds-p-around_small">
+            <lightning-combobox name="Sous Statut"
+                                label="Sous Statut"
+                                data-field="SousStatutVal"
+                                value={SousStatutValue}
+                                options={sousStatutOptions}
+                                disabled={disableSousStatut}
+                                onchange={handleSSChange}
+                                dropdown-alignment="auto">
+            </lightning-combobox>
+        </div>
+        <template if:true={ModifProjet}>
+            <div class="slds-p-around_small">
+                <lightning-combobox name="Motif"
+                                    label="Motif"
+                                    data-field="MotifVal"
+                                    value={defMotifValue}
+                                    disabled={disableMotif}
+                                    options={motifOptions}
+                                    dropdown-alignment="auto">
+                </lightning-combobox>
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col slds-p-around_small">
+                    <lightning-button type="submit"
+                                    data-field="ManualClose"
+                                    variant="destructive-text"
+                                    label="Clôturer manuellement"
+                                    onclick={cloturerCB}
+                                    class="slds-m-left_x-small"
+                                    disabled={disableCloture}>
+                    </lightning-button>
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-button type="submit"
+                                        variant="brand-outline"
+                                        label= "Déposer le projet"
+                                        onclick={deposerCB}
+                                        class="slds-m-left_x-small"
+                                        disabled={disableDepose}>
+                    </lightning-button>
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-button
+                                variant="brand" 
+                                data-field="ButtonSave1"
+                                label="Enregistrer"
+                                onclick={saveCB}
+                                class="slds-m-left_x-small"
+                                disabled={disableSave1}>
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+        <template if:true={ClotureProjet}>
+            <div class="slds-p-around_small">
+                <lightning-combobox name="Motif_Cloture"
+                                        data-field="MotifCloVal"
+                                        value={defMotifClotureValue}
+                                        label="Motif de Clôture"
+                                        options={motifClotureOptions}
+                                        dropdown-alignment="auto">
+                </lightning-combobox>
+            </div>
+            <div class="slds-grid slds-col slds-p-around_small slds-p-left_small">
+                <div class="slds-col">
+                    <lightning-button
+                                variant="brand-outline" 
+                                data-field="ButtonBack"
+                                label="Précédent"
+                                onclick={backCB}>
+                    </lightning-button>
+                </div>
+                <div class="slds-col">
+                    <lightning-button
+                                variant="brand" 
+                                data-field="ButtonSave2"
+                                label="Enregistrer"
+                                onclick={saveCB}
+                                class="slds-float_right">
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,23 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId" controller="HelperButton">
+    <aura:set attribute="partially" value="false"></aura:set>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="accountRecord" type="Account"
+         default="{ 'sobjectType': 'Account'}"/>
+    <!-- User Interface -->
+    	
+    <div class="slds-scrollable slds-p-around_medium slds-text-heading_small" id="modal-content-id-1">
+        <p style="height: 108px; word-wrap: break-word;">Voulez-vous vraiment réinitialiser le mot de passe ?</p>
+        <br/>
+    </div>
+    <!--<aura:handler name="init" action="{!c.accept}" value="{!this}"/>-->
+    <div class="slds-modal__footer">
+        <lightning:button class="slds-button_brand" onclick="{!c.accept}" label="Ok"/>
+        <lightning:button class="slds-button_brand" onclick="{!c.close}" label="Annuler"/>
+    </div>
+
+              
+    
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

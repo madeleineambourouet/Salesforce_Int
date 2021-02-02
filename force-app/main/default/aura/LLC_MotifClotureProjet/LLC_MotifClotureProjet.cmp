@@ -1,0 +1,62 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId" controller="LLC_Editproject">
+    <aura:attribute name="Etat" type="String" />
+    <aura:attribute name="recordId" type="Id" /> 
+    <aura:attribute name="MotifEmpty" type="Boolean"/> 
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 80rem !important;
+        width:80% !important;
+        }
+    </aura:html>
+    <!-- User Interface -->
+    <div>
+        <h1 style="font-size:1.3em;text-align:center">Motif de Clôture</h1>
+        <hr/>
+        <lightning:recordEditForm
+                                  aura:id="editFormClotureProjetNonAdmin"
+                                  onload="{!c.handleLoad}"
+                                  onsubmit="{!c.handleSubmit}"
+                                  onsuccess="{!c.handleSuccess}"
+                                  recordId="{!v.recordId}"
+                                  objectApiName="Projet__c">
+            
+            
+            <div style="text-align:center;margin-bottom:5px">
+                <aura:if isTrue="{!v.MotifEmpty == true}">
+                    <div class="slds-notify slds-notify_toast slds-theme_error">
+                        <div class="slds-notify__content">
+                            <p style="font-size:1.1em">Motif de clôture: Vous devez saisir une valeur</p>               
+                        </div>
+                    </div>
+                </aura:if> 
+            </div>
+            <div>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <lightning:inputField aura:id="statutProjetActuelNonAdmin" fieldName="Statut_Projet__c" disabled="true"/>
+                        <lightning:inputField aura:id="motifClotureNonAdmin" fieldName="Motif_de_cloture__c"/>
+                    </div>
+                    <div class="slds-col">
+                        <lightning:inputField aura:id="subStatutProjetActuelNonAdmin" fieldName="Sous_statut__c" disabled="true"/>
+                        <lightning:inputField aura:id="etatNonAdmin" fieldName="Etat__c" disabled="true"/>
+                    </div>
+                </div>
+                <br/>
+                <div style="float:center">
+                    <lightning:button variant="neutral" 
+                                      label="Enregistrer"
+                                      title="Enregistrer"
+                                      type="submit" />
+                    <lightning:button variant="neutral" 
+                                      label="Annuler"
+                                      title="Annuler"
+                                      onclick="{! c.cancelProject }"/>
+                </div>
+            </div>       
+        </lightning:recordEditForm>
+    </div>
+    
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+    
+</aura:component>

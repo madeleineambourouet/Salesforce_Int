@@ -1,0 +1,28 @@
+<apex:page standardController="Projet__c" extensions="VFC_SendEmailAction" showHeader="false" >
+    <apex:includescript value="{!URLFOR($Resource.CkEditor,'ckeditor/ckeditor.js')}" />
+    <script type="text/javascript">
+    function ReloadCKEditor() {
+         for(name in CKEDITOR.instances)
+        {
+            delete CKEDITOR.instances[name];
+        }
+        CKEDITOR.replaceAll();
+    }
+    </script>
+    <apex:form >
+        <apex:outputpanel id="EmailInfoContainer">
+            <apex:selectList id="SelectTemplate" label="Sélectionnez un modèle:" multiselect="false" size="1" value="{!selectedvalue}">
+                <apex:selectOptions value="{!templates}"/>
+            
+            <apex:actionSupport event="onchange" 
+                                action="{!retreiveTemplate}" 
+                                rerender="EmailInfoContainer"
+                                oncomplete="ReloadCKEditor()"/>
+            
+			</apex:selectList>            
+            <apex:inputtextarea id="EmailHTMLBody"  styleClass="ckeditor" value="{!EmailTemplateValue}" richtext="false" />
+        </apex:outputpanel>
+        
+    </apex:form>
+    
+</apex:page>

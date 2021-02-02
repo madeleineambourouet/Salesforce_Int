@@ -1,0 +1,51 @@
+<apex:page StandardController="zqu__Quote__c" extensions="VFC_QuoteStep1Creation" tabStyle="zqu__Quote__c" action="{!initDefaultValues}" >
+	<style>
+		.quoteWizardButtonBar {
+		text-align: center;
+		}
+	</style>
+	<!-- QuoteWizardTemplate -->
+	<apex:composition template="zqu__QuoteWizardTemplate" >
+		<!-- Define the page body, including form and button bar -->
+		<apex:define name="PageBody" >
+			<!-- Action functions to call navigation methods of BaseQuoteWizardController-->
+		    <apex:actionFunction action="{!navigateNext}" name="onNavigateNext" />
+      		<apex:actionFunction action="{!navigateBack}" name="onNavigateBack" />
+      		<apex:actionFunction action="{!cancel}" name="onCancel" immediate="true" />
+
+				<apex:pageBlock title="Détails de la proposition">
+					<apex:pageMessages showDetail="false"/>
+					<apex:pageBlockSection title="Détail de la quote" columns="2" id="testtest">
+						<apex:outputField value="{!thisQuote.zqu__Account__c}"/>
+						<apex:inputField value="{!thisQuote.zqu__StartDate__c}"/>
+						<apex:inputField value="{!thisQuote.zqu__Amendment_Name__c}" required="true" rendered="{!IF(quoteType ='Amendment' ,true,false)}"/>
+
+						<apex:inputField value="{!thisQuote.Type_de_geste__c}" required="true" rendered="{!IF(quoteType ='Amendment' ,false,true)}">
+							<apex:actionSupport event="onchange" action="{!TypeGesteChange}" reRender="testtest" />
+						</apex:inputField>
+						
+						<apex:inputField value="{!thisQuote.zqu__ValidUntil__c}"/>
+
+                            <apex:selectList value="{!selectedEnseigne}" multiselect="false" label="Enseigne de fidélité" size="1" id="EnseignePicklist" disabled="{!disableTypeGeste}">
+                                <apex:selectOptions value="{!enseignes}"/>
+                            </apex:selectList>
+							<apex:inputField value="{!thisQuote.SGId_vendeur_direct_Agence_CRC__c}" required="false" rendered="{!IF(renderVenteDirecteAgence ,true,false)}"/>
+					</apex:pageBlockSection>
+					<apex:pageBlockSection title="Détail du client" columns="2">
+						<apex:outputField value="{!thisQuote.zqu__SoldToContact__c}"/>
+						<apex:outputField value="{!thisQuote.zqu__BillToContact__c}"/>
+					</apex:pageBlockSection>
+					<apex:pageBlockSection title="Conditions d'abonnement" columns="2">
+					</apex:pageBlockSection>
+					<apex:pageBlockSection title="Conditions supplémentaires" columns="1">
+						<apex:inputField value="{!thisQuote.zqu__Terms__c}"/>
+						<apex:outputText rendered="{! isAmendment}" style="color:red" value="{! $Label.CreateAmendmentStartDateInfo}" />
+					</apex:pageBlockSection>
+				</apex:pageBlock>
+				<apex:outputField value="{!zqu__Quote__c.zqu__Opportunity__c}" rendered="false" />
+
+			
+		</apex:define>
+	</apex:composition>
+
+</apex:page>

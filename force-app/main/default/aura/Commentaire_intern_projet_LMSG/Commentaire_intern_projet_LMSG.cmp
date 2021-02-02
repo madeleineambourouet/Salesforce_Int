@@ -1,0 +1,15 @@
+<!--
+  @description       : 
+  @author            : Hassan Dakhcha
+  @group             : 
+  @last modified on  : 10-30-2020
+  @last modified by  : Hassan Dakhcha
+  Modifications Log 
+  Ver   Date         Author           Modification
+  1.0   10-30-2020   Hassan Dakhcha   Initial Version
+-->
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <lightning:card > 
+       <lightning:recordForm recordId="{!v.recordId}" objectApiName="Projet_LMSG__c" fields="Commentaire_interne__c"/>
+    </lightning:card>
+</aura:component>

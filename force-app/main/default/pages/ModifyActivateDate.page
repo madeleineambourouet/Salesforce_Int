@@ -1,0 +1,13 @@
+<apex:page docType="html-5.0" standardController="zqu__Quote__c" extensions="ModifyActivateDate" showHeader="true" sidebar="true">
+	<apex:form >
+	<apex:messages style="font-style: bold"/>
+		<apex:pageBlock >
+			<apex:pageBlockSection title="Choisissez la nouvelle date d'activation">
+				<apex:input label="Date de début" type="text" value="{!dateChanged}"/>
+				<apex:commandButton value="Modifier cette date " action="{!changeDate}"/>
+				<apex:commandButton value="Précédent" action="{!goBack}"/>
+
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

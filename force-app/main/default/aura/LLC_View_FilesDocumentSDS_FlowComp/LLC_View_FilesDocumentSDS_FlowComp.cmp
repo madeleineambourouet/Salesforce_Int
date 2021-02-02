@@ -1,0 +1,53 @@
+<!--
+  @File Name          : LLC_View_FilesDocument_SDS.cmp
+  @Description        : 
+  @Author             : Hassan Dakhcha
+  @Group              : 
+  @Last Modified By   : Hassan Dakhcha
+  @Last Modified On   : 5/29/2020, 12:03:36 AM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    5/4/2020   Hassan Dakhcha     Initial Version
+-->
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId,lightning:availableForFlowScreens" controller="DocumentServiceSDS"> <!--inherit recordId attribute-->
+    <aura:attribute name="idDocument" type="String" access="global"/>
+    <aura:attribute name="retour" type="String" default=""/>
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="listeFichiers" type="Object[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+  
+    <div class="documentDiv">
+        <!--Example of aura:if--> 
+        <div class="spinnerCenter">
+            <aura:if isTrue="{!v.retour == ''}"> 
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <lightning:spinner alternativeText="Loading" size="small" />
+            </aura:if> 
+            <aura:if isTrue="{!v.message != ''}"> 
+                <br/><br/>
+                <div>{!v.message}</div>
+            </aura:if> 
+        </div>
+        <div>           
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <tbody>
+                    <aura:iteration items="{!v.listeFichiers}" var="fichier">
+                        <tr class="slds-hint-parent">
+                            <th data-label="Opportunity Name" scope="row">
+                                <div class="slds-truncate" title="Cloudhub">
+                                    <!-- a href="{!fichier.uri}" target="_blank">{!fichier.name} - {!fichier.filename} - page {!fichier.order}</a -->
+                                    <a href="{!fichier.uri}" target="_blank"> - {!fichier.filename} </a>
+                                </div>     
+                                <div>
+                                    <img src="{!fichier.uri}" />
+                                </div>                       
+                            </th>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
+</aura:component>

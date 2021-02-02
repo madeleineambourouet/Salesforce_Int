@@ -1,0 +1,9 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="accRecord" type="Account"
+                    default="{ 'sobjectType': 'Account'}"/>
+    <aura:handler name="init" action="{!c.accept}" value="{!this}" />
+    <!-- User Interface -->
+    <div style="font-size:1.3em">Traitement en cours</div>
+	
+</aura:component>

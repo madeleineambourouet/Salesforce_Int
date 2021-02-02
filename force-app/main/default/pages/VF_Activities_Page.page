@@ -1,0 +1,5 @@
+<apex:page sidebar="false" tabstyle="Activites__tab" lightningStylesheets="true" >
+   <apex:pageBlock >
+    <apex:enhancedList rowsPerPage="25" type="Activity" height="850" onComplete="console.log('--- HDAK ---')" />
+   </apex:pageBlock>
+</apex:page>

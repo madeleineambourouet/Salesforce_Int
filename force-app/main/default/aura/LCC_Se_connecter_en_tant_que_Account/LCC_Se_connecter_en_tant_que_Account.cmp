@@ -1,0 +1,14 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="HelperButton">
+    <aura:set attribute="partially" value="false"></aura:set>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="accountRecord" type="Account"
+                    default="{ 'sobjectType': 'Account'}"/>
+    <!-- User Interface -->
+   <aura:handler name="init" action="{!c.accept}" value="{!this}" />
+	<div style="font-size:1.3em">Traitement en cours...</div>
+        
+    
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+	
+</aura:component>

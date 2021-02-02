@@ -1,0 +1,17 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:hasRecordId">
+    <aura:attribute name="recordId" type="Id" /> 
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="simpleRecord" type="Object" />
+    <aura:attribute name="recordError" type="String" />   
+
+   	<lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Projet_LMSG__c">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+            	<lightning:outputField fieldName="Statut_Front_PART__c"/>
+            </div>
+            <div class="slds-col">
+            	<lightning:outputField fieldName="Statut_Front_PRO__c"/>
+            </div>
+        </div>
+    </lightning:recordViewForm>
+</aura:component>

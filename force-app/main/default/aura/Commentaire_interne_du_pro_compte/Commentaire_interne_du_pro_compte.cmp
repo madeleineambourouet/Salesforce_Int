@@ -1,0 +1,84 @@
+<!--
+  @description       : 
+  @author            : Hassan Dakhcha
+  @group             : 
+  @last modified on  : 11-20-2020
+  @last modified by  : Hassan Dakhcha
+  Modifications Log 
+  Ver   Date         Author           Modification
+  1.0   08-17-2020   Hassan Dakhcha   Initial Version
+-->
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="fields" type="String[]" default="['Statut_UBO__c','rating_img__c']" />
+    <aura:attribute name="acc" type="Account"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <force:recordData aura:id="recordLoader" recordId="{!v.recordId}" fields="kbis_status__c,id_status__c,rib_status__c,statut_status__c,Vitrine_PP_Pro__c" 
+                      targetFields="{!v.acc}" targetError="{!v.recordLoadError}" />
+    <lightning:card > 
+        <div class="slds-text-title_bold slds-p-vertical_none slds-p-left_small slds-p-right_small">	
+            <lightning:layout>
+                <lightning:layoutItem flexibility="auto" padding="around-small">
+                    KBIS
+                    <aura:if isTrue="{!v.acc.kbis_status__c == 'VALIDATED'}">
+                        <lightning:icon iconName="action:approval" title="KBIS valide" size="xx-small"/>
+                    </aura:if>
+                    <aura:if isTrue="{!v.acc.kbis_status__c == 'VALIDABLE'}">
+                        <lightning:icon iconName="action:share" title="KBIS transmis" size="xx-small"/>
+                    </aura:if>    
+                    <aura:if isTrue="{!(v.acc.kbis_status__c != 'VALIDATED' &amp;&amp; v.acc.kbis_status__c !='VALIDABLE')}">
+                        <lightning:icon iconName="action:close" title="KBIS non valide" size="xx-small"/> 
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" padding="around-small">
+                    Piéce d'identité
+                    <aura:if isTrue="{!v.acc.id_status__c == 'VALIDATED'}">
+                        <lightning:icon iconName="action:approval" title="Piéce d'identité valide" size="xx-small"/>
+                    </aura:if>
+                    <aura:if isTrue="{!v.acc.id_status__c == 'VALIDABLE'}">
+                        <lightning:icon iconName="action:share" title="Piéce d'identité transmise" size="xx-small"/>
+                    </aura:if>
+                    <aura:if isTrue="{!(v.acc.id_status__c != 'VALIDATED' &amp;&amp; v.acc.id_status__c !='VALIDABLE')}">
+                       <lightning:icon iconName="action:close" title="Piéce d'identité non valide" size="xx-small"/> 
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" padding="around-small">
+                    RIB
+                    <aura:if isTrue="{!v.acc.rib_status__c == 'VALIDATED'}">
+                        <lightning:icon iconName="action:approval" title="RIB valide" size="xx-small"/>
+                    </aura:if>
+                    <aura:if isTrue="{!v.acc.rib_status__c == 'VALIDABLE'}">
+                        <lightning:icon iconName="action:share" title="RIB transmis" size="xx-small"/>
+                    </aura:if>
+                    <aura:if isTrue="{!(v.acc.rib_status__c != 'VALIDATED' &amp;&amp; v.acc.rib_status__c !='VALIDABLE')}">
+                        <lightning:icon iconName="action:close" title="RIB non valide" size="xx-small"/> 
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" padding="around-small">
+                    Statuts de l'entreprise
+                    <aura:if isTrue="{!v.acc.statut_status__c == 'VALIDATED'}">
+                        <lightning:icon iconName="action:approval" title="Statut valid" size="xx-small"/>
+                    </aura:if>
+                    <aura:if isTrue="{!v.acc.statut_status__c == 'VALIDABLE'}">
+                        <lightning:icon iconName="action:share" title="Statut transmis" size="xx-small"/>
+                    </aura:if>
+                    <aura:if isTrue="{!(v.acc.statut_status__c!= 'VALIDATED' &amp;&amp; v.acc.statut_status__c !='VALIDABLE')}">
+                        <lightning:icon iconName="action:close" title="Statut non valide" size="xx-small"/> 
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" padding="around-small">
+                     <lightning:recordForm recordId="{!v.recordId}" objectApiName="Account" fields="{!v.fields}" columns="2" density='comfy' mode="readonly"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" padding="around-small">
+                    <lightning:formattedUrl value="{!v.acc.Vitrine_PP_Pro__c}" label="Fiche du Pro" target="_blank" />
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+        <div class="slds-p-left_small slds-p-right_small">	
+            <lightning:layout pullToBoundary="small">
+                <lightning:layoutItem flexibility="auto" padding="around-small">
+                    <lightning:recordForm  recordId="{!v.recordId}" objectApiName="Account" density='compact' fields="Description_pour_Homly_You__c"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+           </div>
+    </lightning:card>
+</aura:component>

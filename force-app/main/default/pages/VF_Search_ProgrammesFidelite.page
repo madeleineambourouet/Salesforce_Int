@@ -1,0 +1,82 @@
+<apex:page controller="VFC_Search_ProgrammesFidelite" showHeader="{!showHeader}" sidebar="{!showSidebar}">   
+
+    <style type="text/css">
+    	
+        input[type=text] {
+		    width: 30%;
+		    padding: 12px 20px;
+		    margin: 8px 0;
+		    display: inline-block;
+		    border: 1px solid #ccc;
+		    border-radius: 4px;
+		    box-sizing: border-box;
+		}
+		input[type=submit] {
+		    padding: 15px;
+		    text-align: center;
+		    text-decoration: none;
+		    display: inline-block;
+		    font-size: 16px;
+		    margin: 4px 2px;
+		    cursor: pointer;
+		}
+    </style>
+    <apex:includeScript value="/support/console/20.0/integration.js"/>
+    <script>
+		function pfSetTabTitle() {
+            //Set the current tab's title
+            sforce.console.setTabTitle('Programmes de fidélité');
+        }
+        var pageLoad = window.onload;
+		window.onload = function() {
+		    if (pageLoad) {
+		            pageLoad();
+		    }
+		    pfSetTabTitle();
+		}
+		
+
+		function pfOpenPrimaryTab(host,idObject,nameObject) {
+			//alert(idObject);
+            //Open a new primary tab with the salesforce.com home page in it
+            //sforce.console.openPrimaryTab(null, idObject, true,nameObject, openSuccess, 'salesforceTab');
+            sforce.console.openPrimaryTab(null, idObject, true,nameObject, null, 'salesforceTab');
+        }
+        
+        var openSuccess = function openSuccess(result) {
+            //Report whether opening the new tab was successful
+            if (result.success == true) {
+                alert('Primary tab successfully opened');
+            } else {
+                alert('Primary tab cannot be opened');
+            }
+        };
+		
+	</script>
+    <!--<apex:outputText value="{!callfunc}" escape="false"></apex:outputText>-->
+  	<apex:includeScript value="{!URLFOR($Resource.CustomButtonUtils)}" />
+    <apex:sectionHeader title="Programmes de fidélité" />
+    <apex:pageblock >
+	   	<apex:form >
+	   		<label class="slds-form-element__label" for="codeclientp">Code client P </label>
+		    <apex:inputText value="{!codeClientP}" id="codeclientp" style="width:150px;margin-right: 3px;margin-left: 3px;"/>
+		    <apex:commandButton value="Rechercher PF" action="{!getContactsFromGenerationArtisan}" />
+		</apex:form>
+    </apex:pageblock>
+    <apex:pageblock rendered="{!hasErreurs == true}">
+	   	<apex:form >
+	        <apex:pageMessage summary="{!erreurs}" severity="error" strength="3"/>
+		</apex:form>
+    </apex:pageblock>
+    <apex:pageblock rendered="{!account != null}">
+	   	<apex:form >
+        	<apex:pageMessage summary="{!msgAccountUpdate}" severity="info" strength="3">
+		   		<apex:commandLink value=" Accéder au compte" onclick="window.open('/{!account.id}','_self')" reRender="two" rendered="{!account != null && !showHeader == false}"/>
+
+		   		<apex:commandLink value=" Accéder au compte" onclick="pfOpenPrimaryTab('{!host}','{!account.id}','{!account.name}');return false" rendered="{!account != null && !showHeader == true}"/>
+	   		</apex:pageMessage>
+		</apex:form>
+    </apex:pageblock>
+
+
+</apex:page>

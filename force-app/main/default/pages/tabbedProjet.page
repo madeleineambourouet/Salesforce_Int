@@ -1,0 +1,5 @@
+<apex:page standardController="Projet__c" >
+  <!-- Begin Default Content REMOVE THIS -->
+      <apex:relatedList list="Intermediations__r" />
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

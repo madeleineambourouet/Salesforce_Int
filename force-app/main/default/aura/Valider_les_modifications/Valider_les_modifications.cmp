@@ -1,0 +1,22 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId" controller="HelperButton">
+    <aura:attribute name="message" type="String" default=""/> 
+	<aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="quoRecord" type="zqu__Quote__c"
+                    default="{ 'sobjectType': 'zqu__Quote__c'}"/>
+    <aura:handler name="init" action="{!c.myAction}" value="{!this}" />
+    <!-- User Interface -->
+    <aura:if isTrue="{!v.message != '' }"> 
+  		<div style="font-size:1.3em">{!v.message}</div> 
+        <br/>
+        <div style="float:right">
+            <lightning:button variant="brand" 
+                              label="ok"
+                              title="ok"
+                              onclick="{! c.closeModal }"/>
+        </div>
+  	</aura:if>
+    <aura:if isTrue="{!v.message == '' }">
+  		<div style="font-size:1.3em">Traitement en cours</div>
+  	</aura:if>
+    
+</aura:component>

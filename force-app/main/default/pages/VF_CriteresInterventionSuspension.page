@@ -1,0 +1,26 @@
+<apex:page standardController="Contact" extensions="VFC_CriteresInterventionSuspension"  showHeader="true" sidebar="true" docType="html-5.0" >
+   
+    <apex:sectionHeader title="{!$ObjectType.Contact.Label}" subtitle="{!curContact.Name}" />
+
+    <apex:form >
+        <apex:pageMessages />
+        <apex:pageBlock title="Modification des Critères d'intervention" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton id="saveBtn" action="{!setDateSuspension}" value="Enregistrer" />
+                <apex:commandButton action="{!cancelModification}" value="Annuler" />
+            </apex:pageBlockButtons>       
+
+			<apex:pageMessage summary="Veuillez renseigner les 2 champs ou laisser vide les 2 champs" severity="warning" strength="3" rendered="{! isDatesInvalides }" />
+			<apex:pageMessage summary="La date de début ne peut pas être supérieure à la date de fin" severity="warning" strength="3" rendered="{! isDateDebutSupDateFin }" />
+            <apex:pageMessage summary="Vous devez retirer le motif de suspension si les dates de début et de fin de suspension sont vides." severity="warning" strength="3" rendered="{! ismotifnull }" />
+                     
+            
+	        <apex:pageBlockSection id="dateSuspension" title="Dates de suspension" columns="2" >
+                <apex:inputField value="{!critereInterventionGenerique.Date_de_debut__c}" />
+                <apex:inputField value="{!critereInterventionGenerique.Date_de_fin__c}" />
+                <apex:inputField value="{!critereInterventionGenerique.Motifs_de_suspension__c}" />
+                
+	        </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

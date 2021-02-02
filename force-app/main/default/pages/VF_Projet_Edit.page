@@ -1,0 +1,3 @@
+<apex:page standardController="Projet__c">
+    <apex:iframe height="1300px" src="{!$Label.URL_web_pour_iFrames}{!Projet__c.Id}" scrolling="true" title="{!$Label.URL_web_pour_iFrames}{!Projet__c.Id}"/>
+</apex:page>

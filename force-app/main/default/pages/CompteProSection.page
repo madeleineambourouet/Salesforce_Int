@@ -1,0 +1,52 @@
+<apex:page standardController="Account" extensions="CompteProSection" showHeader="false" sidebar="false">
+	<style>
+		.activeTab {background-color: #236FBD; color:white; background-image:none}
+		.inactiveTab { background-color: lightgrey; color:black; background-image:none}
+
+		/*body {
+		    background-color: #444;
+		    margin: 0;
+		}  */  
+		#wrapper {
+			width: 100%;
+			margin: 0 auto;
+		}
+
+		#leftcolumn, #rightcolumn, #listcolumn {
+		    border: 1px solid white;
+		    float: left;
+		    min-height: 130px;
+		    color: white;
+		}
+
+		#leftcolumn {
+			width: 50%;
+		}
+		#rightcolumn {
+			width: 49%;
+		}
+
+		#listcolumn {
+			margin: 0 100px;
+			width: 80%;
+		}
+	</style>
+	<apex:tabPanel switchType="client" selectedTab="name1" id="AccountTabPanel"
+	        tabClass="activeTab" inactiveTabClass="inactiveTab">
+	    <apex:tab label="15J" name="name1" id="tabOne">
+	    	<c:CompteProSection offerWrapper="{!lOffrew}" interWrapper="{!int15}" geocatlistwrapper="{!geo15}"/>
+	    </apex:tab>
+	    <apex:tab label="1 Mois" name="name2" id="tabTwo">
+	    	<c:CompteProSection offerWrapper="{!lOffrew}" interWrapper="{!int1mois}" geocatlistwrapper="{!geo1mois}"/>
+	    </apex:tab>
+	    <apex:tab label="3 Mois" name="name3" id="tabThree">
+	    	<c:CompteProSection offerWrapper="{!lOffrew}" interWrapper="{!int3mois}" geocatlistwrapper="{!geo3mois}"/>
+	    </apex:tab>
+	    <apex:tab label="6 Mois" name="name4" id="tabFour">
+	    	<c:CompteProSection offerWrapper="{!lOffrew}" interWrapper="{!int6mois}" geocatlistwrapper="{!geo6mois}"/>
+	    </apex:tab>
+	    <apex:tab label="1 An" name="name5" id="tabFive">
+	    	<c:CompteProSection offerWrapper="{!lOffrew}" interWrapper="{!int1an}" geocatlistwrapper="{!geo1an}"/>
+	    </apex:tab>
+	</apex:tabPanel>
+</apex:page>

@@ -1,0 +1,3 @@
+<apex:page standardController="Projet__c" extensions="VFC_Extension_Projet" action="{!fillCountry}">
+    
+</apex:page>

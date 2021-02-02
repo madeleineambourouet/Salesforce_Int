@@ -1,0 +1,4 @@
+<apex:page standardController="Intermediation__c" showHeader="true" sidebar="true">
+	{!$Site.OriginalUrl}
+	   <a href="{!$Site.Domain}"> okok</a>
+</apex:page>

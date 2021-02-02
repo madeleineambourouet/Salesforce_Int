@@ -1,0 +1,10 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId" controller="HelperButton">
+	<aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="quoRecord" type="zqu__Quote__c"
+                    default="{ 'sobjectType': 'zqu__Quote__c'}"/>
+    <aura:handler name="init" action="{!c.myAction}" value="{!this}" />
+    <!--<div class="slds-modal__footer">
+        <lightning:button class="slds-button_brand" onclick="{!c.myAction}" label="Accept"/>
+    </div>-->
+    
+</aura:component>

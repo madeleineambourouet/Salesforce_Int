@@ -1,0 +1,3 @@
+<apex:page controller="QuoteMethods" action="{!calculateCompetence}">
+
+</apex:page>

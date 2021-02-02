@@ -1,0 +1,69 @@
+<apex:page standardController="zqu__Quote__c" recordSetVar="opportunities" extensions="HelperButton">
+
+	<apex:includeScript value="/soap/ajax/21.0/connection.js"/>
+	<apex:includeScript value="soap/ajax/21.0/apex.js"/>
+
+	<script>
+
+		//alert('ok {!$CurrentPage.Parameters.Id}');
+
+		function getQuoteCreate() {
+		Visualforce.remoting.Manager.invokeAction(
+	        '{!$RemoteAction.HelperButton.creerModifQuote}',
+	        '{!$CurrentPage.Parameters.Id}',
+	        function(result, event){
+	        	//alert("debug fonction " + event);
+	        	var str = JSON.stringify(result);
+	        	/*for (var property in event) {
+				  output += property + ': ' + event[property]+'; ';
+				}
+				console.log(output);
+				alert(output);*/
+				//alert('event.status '+event.status);
+				if (event.status) {
+					//alert('event.result '+event.result);
+					if(event.result == '' || event.result == null) {
+						verif();
+					}
+					else{
+						alert(event.result);
+						window.location.href = "/{!$CurrentPage.Parameters.Id}";
+					}
+				} else {
+					alert("Une erreur s'est produite, contactez votre administrateur Salesforce.")
+					window.location.href = "/{!$CurrentPage.Parameters.Id}";
+				}
+	        });
+		};
+
+		function verif() {
+		Visualforce.remoting.Manager.invokeAction(
+	        '{!$RemoteAction.HelperButton.getUrl}',
+	        '{!$CurrentPage.Parameters.Id}',
+	        function(result, event){
+	        	/*for (var property in event) {
+				  output += property + ': ' + event[property]+'; ';
+				}
+				console.log(output);
+				alert(output);*/
+				if (event.status) {
+					if ((event.result).startsWith('/apex')) {
+						var url = event.result.replace(new RegExp('amp;', 'g'), '');
+						//alert(url);
+						window.location.href = url;
+					} else {
+						window.location.href = "/{!$CurrentPage.Parameters.Id}";
+					}
+				} else {
+					alert("Une erreur s'est produite, contactez votre administrateur Salesforce.")
+					window.location.href = "/{!$CurrentPage.Parameters.Id}";
+				}
+	        });
+		};
+
+		getQuoteCreate();
+		//alert(tmp);
+
+		
+	</script>
+</apex:page>

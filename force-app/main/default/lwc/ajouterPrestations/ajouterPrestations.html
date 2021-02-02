@@ -1,0 +1,90 @@
+<!--
+  @File Name          : ajouterPrestations.html
+  @Description        : 
+  @Author             : Hassan Dakhcha
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 2/7/2020, 4:40:27 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    1/23/2020          Hassan Dakhcha         Initial Version
+-->
+<template>
+    <div class="modal-header slds-modal__header">
+        <h2 class="title slds-text-heading--medium" > Ajouter des prestations </h2>
+    </div>
+<template if:false={nextPage} >
+    <!--div class="slds-section slds-is-open ">
+        <h3 class="slds-section__title slds-theme_shade">
+          <span class="slds-truncate slds-p-horizontal_small slds-align_absolute-center" title="Section Title"> Ajouter des prestations </span>
+        </h3>
+    </div -->
+    <div class="slds-p-top_x-small slds-p-bottom_small">
+        <!-- Toggle selection (select All / Deselect All) -->
+        <lightning-button   label={toggleButtonLabel} id="SelectBtn" title="Sélectionner/Désélectionner" 
+                            icon-name={toggleIconName} onclick={handleToggleClick}>
+        </lightning-button>
+        <!-- save -->
+        <div class="slds-float_right">
+            <lightning-button label="Suivant" id="NextBtn" title="Suivant" icon-name=utility:forward 
+                              onclick={handleNextPage} icon-position=right class="right-align">
+            </lightning-button>
+        </div>
+    </div>
+    <div class="slds-box slds-box_xx-small slds-scrollable_none">
+        <!-- Categories -->
+        <!-- template if:true={categoryList.data} -->
+        <lightning-accordion title="Sélectionnez les prestations" allow-multiple-sections-open >
+            <template for:each={catPrestMap} for:item="category">
+                <lightning-accordion-section key={category.key} name={category.key} label={category.key}>
+                    <lightning-button   slot="actions" id={category.key} 
+                                        variant="Bar" 
+                                        label="0 sélection"
+                                        title="Nombre de prestations sélectionnées" 
+                                        class="slds-m-left_xxx-small">
+                    </lightning-button>
+                    <select multiple class="slds-select" id={category.key}  onchange={onSelectChange}>
+                        <template for:each={category.value} for:item="prestation">
+                            <option key={category.key} value={prestation.Id} id={category.key} 
+                                    label={prestation.Name} > {prestation.Name} </option>>
+                        </template>
+                    </select>
+                </lightning-accordion-section>
+            </template >
+        </lightning-accordion>
+    </div>
+</template>
+<template if:true={nextPage}>
+    <div class="slds-p-top_x-small slds-p-bottom_small">
+        <!-- Save -->
+        <lightning-button label="Enregistrer" id="SaveBtn" title="Enregistrer" icon-name={saveIconName} 
+                           onclick={handleSave} class="right-align">
+        </lightning-button>
+        <!-- Back -->
+        <div class="slds-float_right">
+            <lightning-button label='Précédent' id="PreviousBtn" title="Précédent" icon-name=action:back
+            onclick={handleNextPage}>
+        </lightning-button>
+        </div>
+    </div>
+    
+    <lightning-card if:false={noneSelected} title="Liste des prestation sélectionnées" icon-name="standard:service_contract">
+        <ul class="slds-m-around_medium">
+            <template for:each={prestaList} for:item="item">
+                <li key={item.key}>
+                    <lightning-card  style="color:navyblue" title={item.key}>
+                        <ul class="slds-m-around_medium">
+                            <template for:each={item.value} for:item="item2">
+                                <li key={item2.key}>
+                                    <p class="slds-p-horizontal_small"> {item2} </p>
+                                </li>
+                            </template>
+                        </ul>
+                    </lightning-card>
+                 </li>
+            </template>
+        </ul>
+    </lightning-card>
+    <b if:true={noneSelected} style="color:red"> Aucune prestation n'a été sélectionnée </b>
+</template>
+</template>

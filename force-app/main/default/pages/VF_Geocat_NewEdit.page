@@ -1,0 +1,14 @@
+<apex:page standardController="GeoCat__c" extensions="VFC_Geocat_NewEdit" >
+    <apex:form >
+                <apex:messages />
+                <apex:pageBlock title="New">
+                    <apex:pageBlockButtons >
+                        <apex:commandButton title="Sauvegarde et Retour au Critère d'intervention" action="{!saveGeocat}" image="{!URLFOR($Label.icon_save)}" />
+                        <apex:commandButton title="Retour au Critère d'intervention" action="{!backsaveGeocat}" image="{!URLFOR($Label.icon_back)}" />
+                        <apex:commandButton title="Sauvegarde rapide" action="{!saveGeocatQuick}" image="{!$Resource.savequick}"/>
+                    </apex:pageBlockButtons>
+        <c:Component_Geocat_Form displayContact="true" newGeocat="{!GeoCat__c}" mapRecord="{!mapRecord}" savegeocatbis="{!saveGeocatBis}" newgeo="{!newgeo}"/>
+         </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>

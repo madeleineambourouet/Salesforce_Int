@@ -1,0 +1,9 @@
+<apex:page controller="CriteresInterventionToExcel" contentType="application/vnd.ms-excel#SalesForceExport.xls" cache="true">
+    <apex:pageBlock title="Export Results" >
+        <apex:pageBlockTable value="{!listCi}" var="ci">
+            <apex:column value="{!ci.ID}"/>
+            <apex:column value="{!ci.Adresse__r.Key__c}"/>
+            <apex:column value="{!ci.Contact__r.LastName}"/>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+</apex:page>

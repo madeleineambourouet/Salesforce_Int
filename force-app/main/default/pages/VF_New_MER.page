@@ -1,0 +1,43 @@
+<apex:page standardController="Intermediation__c" recordSetVar="applications" extensions="VFC_New_MER"  showHeader="true" sidebar="true">
+    <style type="text/css">
+    </style>
+
+    <apex:sectionHeader title="{!$ObjectType.Projet__c.Label}" subtitle="{!curPrj.Name}" />
+
+    <apex:form >
+        <apex:pageBlock title="{! pageBlockTitle}" mode="edit">
+
+ 			<apex:pageBlockButtons >
+                <apex:commandButton value="Save" onclick="this.onclick=function(){return false;}" action="{!saveNewMER}"  />
+                <apex:commandButton id="cancelBtn" action="{! cancelEditMER }" value="Cancel" immediate="true" />
+            </apex:pageBlockButtons>
+        
+            <apex:pageMessage summary="Vous devez assigner une compétence à cette MER!" severity="warning" strength="3" rendered="{! isCompetenceNull }" />
+            <apex:pageMessage summary="Vous devez assigner un contact à cette MER! (pas de contact principal trouvé pour le compte)" severity="warning" strength="3" rendered="{! isContactNull }" />
+            
+            <apex:pageBlockSection title="Nouvelle MER" columns="2" id="nouvelleMER">
+                <apex:outputField value="{!curMER.Projet__c}" />
+                <apex:inputField value="{!curMER.Professionnel__c}" rendered="true"/>
+                <apex:inputField value="{!curMER.Date_MER_Architecte__c}" rendered="{! !isArtisansQualifies && !isAccompagnement}" required="false"/> 
+                <apex:inputField value="{!curMER.Date_MER_LMSG__c}" rendered="{!isAccompagnement}" required="false"/>
+                <apex:inputField value="{!curMER.Contact__c}" rendered="true">
+    			<apex:actionSupport event="onchange" action="{!ContactProChanged}" reRender="nouvelleMER" />
+				</apex:inputField>                
+                <!-- <apex:inputField value="{!curMER.Prospect__c}" rendered="true"/> -->
+
+                <apex:pageBlockSectionItem rendered="{! isArtisansQualifies }" >
+                    <apex:outputLabel value="Competence" for="Competence"/>
+                     <apex:outputPanel id="Competence">
+                        <apex:selectList size="1" value="{! CompetenceSelected }">
+                            <apex:selectOptions value="{! CompetenceOptions }"/>
+                            <apex:actionSupport event="onchange" action="{! CompetenceChanged }" reRender="nouvelleMER" />                           
+                        </apex:selectList>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                
+                
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,13 @@
+<apex:page docType="html-5.0" language="en-US" showHeader="true" sidebar="false" controller="ImportToolCategory">
+	<apex:form >
+      <apex:sectionHeader title="Importation"/>
+      <apex:pageBlock >
+      		<!-- <apex:inputText /><br/> -->
+      		<apex:outputText value="Date de création"/><apex:input title="date de debut" type="date" value="{!date_debut}"/>
+      </apex:pageBlock>
+      <apex:inputFile value="{!contentFile}" filename="{!nameFile}"/>
+      <br/>
+      <apex:commandButton action="{!UpsertCategorie}" value="update File" id="theButton3" style="width:70px;"/>
+    </apex:form>
+    <apex:messages />
+</apex:page>

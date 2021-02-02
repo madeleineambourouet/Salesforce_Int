@@ -1,0 +1,39 @@
+<!--
+  @File Name          : synchronizeMatch.html
+  @Description        : 
+  @Author             : Hassan Dakhcha
+  @Group              : 
+  @Last Modified By   : Hassan Dakhcha
+  @Last Modified On   : 7/3/2020, 3:29:35 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    3/29/2020   Hassan Dakhcha     Initial Version
+-->
+<template>
+    <lightning-card title="Liste des matchs " variant="Narrow" icon-name="custom:custom1" > <!--class="slds-p-around_small slds-grid slds-page-header" -->
+        <!-- div style="width: auto;"-->
+            <template if:true={showLoadingSpinner}>
+                <lightning-spinner alternative-text="Loading ... " size ="large" class="slds-align_absolute-center"></lightning-spinner>
+            </template>
+            <template if:true={showError}>
+                <p><lightning-formatted-text value={error} ></lightning-formatted-text></p>
+            </template>
+                <p><lightning-formatted-text value={nombreDeMatch} ></lightning-formatted-text></p>
+            <template if:true={displayTable}>
+                    <!--div style="height: 300px;" -->
+                    <lightning-datatable class = "datatable-row-detail"
+                        key-field="Id"
+                        data={data}
+                        columns={columns}
+                        errors={error}
+                        sorted-by={sortBy}
+                        sorted-direction={sortDirection}
+                        onsort={doSorting}
+                        hide-checkbox-column
+                        show-row-number-column>
+                    </lightning-datatable>
+                <!--div -->
+            </template>
+        <!--/div -->
+    </lightning-card>
+</template>

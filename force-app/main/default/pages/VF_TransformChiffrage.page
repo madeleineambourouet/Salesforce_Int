@@ -1,0 +1,3 @@
+<apex:page controller="ChiffrageToProjetCtrl" showHeader="{!showHeader}" sidebar="true">
+    <apex:iframe height="1300px" src="{!chiffrageUrl}{!categorieKey}{!$Label.URL_iframe_TransformChiffrage2}{!chiffrageId}" scrolling="true" title="{!chiffrageUrl}{!categorieKey}{!$Label.URL_iframe_TransformChiffrage2}{!chiffrageId}"/>
+</apex:page>

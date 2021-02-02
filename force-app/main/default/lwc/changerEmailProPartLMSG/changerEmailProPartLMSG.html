@@ -1,0 +1,24 @@
+<!--
+  @description       : 
+  @author            : Hassan Dakhcha
+  @group             : 
+  @last modified on  : 09-10-2020
+  @last modified by  : Hassan Dakhcha
+  Modifications Log 
+  Ver   Date         Author           Modification
+  1.0   09-07-2020   Hassan Dakhcha   Initial Version
+-->
+<template>
+    <div class="modal-header slds-modal__header">
+        <h2 class="title slds-text-heading--medium" > Changer l'adresse email </h2>
+        <h2 class="title slds-text-heading--medium" > --------------------------------------- </h2>
+        <h2 class="title slds-text-heading--low" > Une fois la procédure lancée, l'utilisateur (Pro/Part) va recevoir un email de validation de la modification. Une fois la validation effectuée, le changement sera effectif </h2>
+    </div>
+    <div class="slds-m-bottom_medium">
+      <lightning-input type = "email" label = "Entrez le nouvel email :" field-name="Nouvel email" required >
+      </lightning-input>
+    </div>
+    <lightning-button variant="brand" label="Lancer le changement" title="Lancer le changement" onclick={changeEmailCB} 
+                            class="slds-m-right_medium slds-align_absolute-center">
+    </lightning-button>
+</template>

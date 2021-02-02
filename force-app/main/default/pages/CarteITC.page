@@ -1,0 +1,4 @@
+<apex:page standardController="GeoCat__c" extensions="CarteITC" action="{!redirecto}" showHeader="false" sidebar="false">
+	<!-- <iframe height="600px" id="theIframe" name="theIframe" src="{!$Label.LIEN_CARTE_ITC}" width="100%"></iframe> -->
+	<!-- <apex:iframe src="https://intermed-int-dsd.sgdb-france.net/vision/geocat/map.html" scrolling="true" id="theIframe"/> -->
+</apex:page>

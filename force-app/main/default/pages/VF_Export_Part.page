@@ -1,0 +1,5 @@
+<apex:page controller="VFC_Export_Part" action="{!VFC_Export_Part}" readOnly="true" contentType="application/vnd.ms-excel#liste_Part.csv">{!header}
+  <apex:repeat value="{!lstwrapper}" var="x">
+{!x.PersonEmail};{!x.Name}
+  </apex:repeat>
+</apex:page>

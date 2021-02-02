@@ -1,0 +1,123 @@
+<!--
+  @description       : 
+  @author            : Hassan Dakhcha
+  @group             : 
+  @last modified on  : 01-18-2021
+  @last modified by  : Hassan Dakhcha
+  Modifications Log 
+  Ver   Date         Author           Modification
+  1.0   01-16-2021   Hassan Dakhcha   Initial Version
+-->
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId,flexipage:availableForRecordHome,force:lightningQuickAction,force:hasSObjectName" access="global" controller="TaroUtils">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="sObjectName" type="String" />
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="chiffrage" type="Object"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="besoinTravaux" type="String" default=""/> 
+    <aura:attribute name="bugetTravaux" type="String" default=""/> 
+    <aura:attribute name="dateTravaux" type="String" default=""/> 
+    <aura:attribute name="zoneCPTravaux" type="String" default=""/> 
+    <aura:attribute name="zoneVilleTravaux" type="String" default=""/> 
+    <aura:attribute name="sectionsTravaux" type="Object[]"/> 
+    <aura:attribute name="rgeGrants" type="Object[]"/> 
+    <aura:attribute name="totalGrants" type="String" default=""/> 
+    <aura:attribute name="visibleSection" type="String" default="Summary"/> 
+
+    <aura:if isTrue="{!v.message == '' }">
+        <div style="font-size:1.3em">Chargement en cours ...</div>
+    </aura:if>
+    
+    <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large" >
+        <div class="slds-modal__container">
+            <div class="slds-modal__header" style="background-color: #2E4057; color:#FFFFFF;font-weight: 700;">
+                <lightning:buttonIcon iconName="utility:close" alternativeText="Close" size="large" variant="bare-inverse" class="slds-modal__close" onclick="{! c.closeModal }"/>
+                <h2 id="header43" class="slds-text-heading--small">{!v.besoinTravaux }</h2>
+            </div>
+            <div class="slds-modal__content slds-p-top--x-large slds-p-around--small" aura:id="modalbody" id="modalbody">
+                <!-- your component goes here -->
+                <div class="slds-grid slds-gutters slds-p-around--small" style="width:100%;text-align:center">
+                    <div class="slds-col">
+                        <img src="{!$Resource.TaroChiffrageIcones + '/TaroChiffrageIcones/projet_bugdet.png'}"/>
+                        <div style="margin-top:10px">Budget estimé</div>
+                        <div style="font-weight: 700;">{!v.bugetTravaux }</div>
+                    </div>
+                    <div class="slds-col">
+                        <img src="{!$Resource.TaroChiffrageIcones + '/TaroChiffrageIcones/projet_periode_travaux.png'}"/>
+                        <div style="margin-top:10px">Prévu</div>
+                        <div style="font-weight: 700;">{!v.dateTravaux }</div>
+                    </div>
+                    <div class="slds-col">
+                        <img src="{!$Resource.TaroChiffrageIcones + '/TaroChiffrageIcones/projet_localisation.png'}"/>
+                        <div style="margin-top:10px">{!v.zoneCPTravaux }</div>
+                        <div style="font-weight: 700;">{!v.zoneVilleTravaux }</div>
+                    </div>
+                    <aura:if isTrue="{!v.rgeGrants}">
+                        <div class="slds-col">
+                            <img src="{!$Resource.TaroChiffrageIcones + '/TaroChiffrageIcones/aides_reno_energetique.png'}" style="width:40px;height:40px;"/>
+                            <div style="margin-top:8px">Aides à la réno énergétique</div>
+                            <div style="font-weight: 700;">{!v.totalGrants}€</div>
+                        </div>
+                    </aura:if>
+                </div>
+                <hr/>
+                <lightning:accordion allowMultipleSectionsOpen="true" activeSectionName="{!v.visibleSection}">
+                    <lightning:accordionSection name="Summary" label="Résumé du projet">
+                        <div>
+                            <div class="slds-card">
+                                <div class="slds-p-around_small">
+                                    <aura:iteration items="{!v.sectionsTravaux}" var="sectionItem">
+                                        <div style="color:#959595">{!sectionItem.label}</div>
+                                        <div>
+                                            <ul>
+                                                <aura:iteration items="{!sectionItem.items}" var="item">
+                                                    <li>{!item.label}: {!item.value}</li>
+                                                </aura:iteration>
+                                            </ul>
+                                        </div>
+                                        <aura:iteration items="{!sectionItem.categories}" var="categorie">
+                                            <div><strong>{!categorie.label}</strong></div>
+                                            <div>
+                                                <ul>
+                                                    <aura:iteration items="{!categorie.items}" var="categorieItem">
+                                                        <li>{!categorieItem.label}: {!categorieItem.value}</li>
+                                                    </aura:iteration>
+                                                </ul>
+                                            </div>
+                                        </aura:iteration>
+                                        <hr/>
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                        </div>
+                	</lightning:accordionSection>
+                    <aura:if isTrue="{!v.rgeGrants}">
+                        <lightning:accordionSection name="Reno" label="Aides à la rénovation énergétique">
+                            <!--div class="slds-card"-->
+                                <!--div class="slds-grid slds-gutters" style="width:100%;text-align:left"-->
+                                    <lightning:layout>
+                                        <aura:iteration items="{!v.rgeGrants}" var="grant">
+                                            <lightning:layoutItem padding="horizontal-large">
+                                                <!--div class="header-column"-->
+                                                    <img src="{!$Resource.TaroChiffrageIcones + '/TaroChiffrageIcones/' + grant.code + '.png'}" style="width:100px;height:60px;"/>
+                                                    <div class="slds-border_top slds-align_absolute-center" style="font-weight: 700;">{!grant.amount}€</div>
+                                                <!--/div-->
+                                            </lightning:layoutItem>
+                                        </aura:iteration>
+                                    </lightning:layout>
+                                <!--/div-->                                
+                            <!--/div-->
+                        </lightning:accordionSection>
+                    </aura:if>
+                </lightning:accordion>
+            </div><!-- modal -->
+            <div class="slds-modal__footer">
+                <!-- Footer elements, if required -->
+                <lightning:button label="Fermer" title="Fermer" onclick="{! c.closeModal }"/>
+            </div>
+        </div>
+    </div>
+    
+    
+</aura:component>
